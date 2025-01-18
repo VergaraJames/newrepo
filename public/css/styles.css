@@ -1,6 +1,282 @@
-/******* Change Box Model ***************/
 *,
 *:before,
 *:after {
   box-sizing: border-box;
+
+}
+
+:root {
+  --bg_blue: #4c96d7;
+  --secondary-color: #333;
+}
+
+/* Styles all sections */
+body {
+
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 10px;
+
+}
+#wrapper {
+  background-color: whitesmoke;
+
+}
+
+section {
+  padding: 20px;
+}
+
+h2 {
+  margin-top: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+/* Picture section */
+.picture-section {
+  position: relative;
+  /* Add position relative */
+  text-align: center;
+}
+
+.picture-section img {
+  max-width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  color: var(--bg_blue);
+  background-color: rgba(255, 255, 255, 0.7);
+  /* White with 70% opacity */
+  text-align: left;
+  /* Align text to the left */
+  padding: 20px;
+}
+
+.overlay h2,
+.overlay a {
+  margin: 0;
+}
+
+.overlay a {
+  display: block;
+  transition: filter 0.3s ease;
+  /* Add transition for smooth effect */
+}
+
+.overlay a:hover img {
+  filter: brightness(80%);
+  /* Apply brightness effect on hover */
+}
+
+/* Reviews section */
+.reviews-section {
+  background-color: #f4f4f4;
+}
+
+/* Upgrades section */
+.upgrades-section {
+  background-color: #f4f4f4;
+}
+
+.upgrade-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.upgrade-item {
+  width: 50%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.blue-box {
+  background-color: var(--bg_blue);
+  text-align: center;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.blue-box img {
+  max-width: 100%;
+  height: auto;
+}
+
+.upgrade-item a {
+  display: block;
+  text-align: center;
+  color: #000;
+  text-decoration: none;
+}
+
+/* Picture section */
+.picture-section {
+  grid-column: span 2;
+  /* Span both columns */
+  text-align: center;
+}
+
+.reviews-section {
+  order: 2;
+  /* Place the reviews section as the second item */
+}
+.reviews-section li{
+  list-style-type: disc;
+}
+
+/* Upgrades section */
+.upgrades-section {
+  order: 1;
+  /* Place the upgrades section as the first item */
+}
+
+/* Reviews and upgrades */
+.reviews-section,
+.upgrades-section {
+  width: 90%;
+  /* Each section takes full width */
+}
+.double{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Header */
+#top-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  color: #000;
+  padding: 10px 20px;
+}
+
+.siteName a {
+  font-size: 32px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #000;
+}
+
+#tools {
+  font-variant: small-caps;
+}
+
+#tools a {
+  font-size: 16px;
+  letter-spacing: 2px;
+  text-decoration: none;
+  /* Remove underline */
+  color: #000;
+}
+
+#tools a:hover,
+a:hover {
+  color: #ccc;
+  /* Change the color on hover if needed */
+}
+
+/* Navigation */
+nav {
+  background-color: black;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  /* Evenly distribute items */
+}
+
+nav ul li {
+  padding: 10px 20px;
+  /* Add padding to create space around each item */
+  font-size: 18px;
+  /* Increase font size */
+  color: #fff;
+
+}
+
+nav ul li a {
+  color: #fff;
+  /* White font color */
+  text-decoration: none;
+  padding: 15px 15px;
+  /* Add padding to create larger hover area */
+  transition: background-color 0.3s ease;
+  /* Smooth transition for hover effect */
+}
+
+nav ul li:hover {
+  background-color: #fdfbfb;
+  color: blue ;
+}
+
+/* Footer */
+footer {
+  
+  width: 100%;
+  /* Full width */
+  padding: 10px 20px;
+  /* Add padding */
+}
+
+footer p {
+  margin: 0;
+  /* Remove default margin */
+}
+
+/* Web layout using CSS Grid */
+@media screen and (min-width: 768px) {
+
+  /* Grid container */
+  body {
+    
+    /* display: grid;
+    /* grid-template-columns: 1fr 1fr;
+    /* Two columns of equal width */
+    /* gap: 20px;
+    /* Gap between grid items */
+    margin: 20px auto;
+    /* Slight margin for top and bottom */
+    padding: 10px 20px;
+    max-width: 80%;
+    /* 80% of the screen width */
+    background-image: url("https://raw.githubusercontent.com/VergaraJames/newrepo/main/public/images/site/checkerboard.jpg");
+    background-size: cover;
+    /* Cover the entire body */
+    background-repeat: no-repeat;
+    /* No repeating */
+    background-attachment: fixed;
+    /* Fixed background */
+    border: 10px solid #007bff;
+    /* Blue border */
+    border-radius: 20px;
+    /* Soft, curved corners */
+    background-color: #fff;
+    /* White background */
+  }
+}
+
+/* Media query for mobile view */
+@media screen and (max-width: 600px) {
+  nav ul li {
+    padding: 15px 20px;
+    /* Increase padding for thicker nav bar in mobile view */
+  }
+
+  footer {
+    font-size: 14px;
+    /* Adjust font size for smaller screens if needed */
+  }
 }
