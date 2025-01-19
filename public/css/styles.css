@@ -131,9 +131,8 @@ ul.custom-bullet {
   padding: 5px;
 }
 
-.OwnToday h2,
-.OwnToday a {
-  margin: 1;
+.OwnToday h2, .OwnToday a {
+  margin: 2px;
 }
 
 .OwnToday a {
@@ -233,13 +232,12 @@ footer p {
     border: 10px solid #007bff;
     border-radius: 20px;
   }
-  
+
 }
 
 @media only screen and (min-width: 560px) {
   nav li {
-    display: flexbox;
-    /* estaba flexbox */
+    display: flex;
     width: 25%;
     float: left;
   }
