@@ -12,8 +12,6 @@ const app = express()
 const static = require("./routes/static")
 const baseController = require("./controllers/baseController")
 const inventoryRoute = require("./routes/inventoryRoute")
-const port = process.env.PORT
-const host = process.env.HOST
 
 
 /* ***********************
@@ -38,9 +36,8 @@ app.use("/inv", inventoryRoute)
  * Local Server Information
  * Values from .env (environment) file
  *************************/
-// const port = process.env.PORT
-
-// const host = process.env.HOST
+const port = process.env.PORT
+const host = process.env.HOST
 
 /* ***********************
  * Log statement to confirm server operation
