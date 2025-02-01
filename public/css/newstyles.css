@@ -1,0 +1,186 @@
+/******* Change Box Model ***************/
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@100..900&display=swap');
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  padding: 10px; 
+}
+
+.siteName a {
+  font-family: Anton;
+  text-decoration: none;
+  font-size: 2em;
+  color: black;
+}
+
+#tools a {
+  font-family: Anton;
+  text-decoration: none;
+  font-size: 1em;
+  color: black;
+}
+
+h1, h2, h3, p, li {
+  font-family: Outfit;
+  color: black;
+}
+.menu {
+  display: flex; 
+  flex-direction: column;
+  background-color: black;
+  padding: 0;
+  margin: 10px 0;
+  font-size: 1.5em;
+}
+.menu ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  list-style: none;
+  padding: 1rem;
+  margin: 0;
+  width: 100%;
+}
+.menu li {
+  display: block;
+}
+.menu a {
+  text-align: center;
+  padding: .5rem 1rem;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  color: white;
+}
+
+.grouped-content {
+  margin: 20px;
+  padding: 20px;
+}
+
+.vehicle-highlight {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 20px;
+  justify-items: center;
+  align-items: center;
+}
+
+.vehicle-highlight img {
+  display: flex;
+  grid-column: auto;
+  justify-self: center;
+  width: 150%;
+}
+
+.vehicle-info {
+  position: relative;
+  color: #0cb4df;
+  background-color: rgba(255, 255, 255, 0.5);;
+  padding: 5px;
+}
+
+.vehicle-info li {
+  list-style: none;
+}
+.content-columns {
+  text-align: center ;
+}
+.reviews {
+  padding: 20px;
+  justify-self: center;
+}
+.upgrade-item {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #0cb4df;
+  border-radius: 5px;
+  width: 150px;
+  height: 150px;
+  justify-self: center;
+  text-align: center;
+}
+.cta-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px 0;
+  background-color: #30aece; 
+  color: darkblue;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #1f7388;
+}
+
+  @media (min-width: 600px) {
+    body {
+      background-image: url('../images/site/checkerboard.jpg');
+      background-repeat: repeat;
+      background-size: 375px 375px;
+    }
+    #wrapper {
+  
+      margin: 20px 75px;
+      padding: 10px;
+      background-color: white; 
+      border: 5px solid #30aece; 
+      border-radius: 5px;
+    }
+    .vehicle-highlight img {
+      display: flex;
+      grid-column: auto;
+      justify-self: center;
+      width: 200%;
+    }
+    .reviews {
+      padding: 20px;
+      grid-column: 2 / 3;
+      grid-row: 2;
+    
+    }
+    .grouped-content {
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 20px;
+    }
+    .content-columns {
+      padding: 0px;
+      grid-row: 2;
+      gap: 10px;
+    }
+    
+    .upgrades {
+      display: inline-block;
+      grid-template-columns: 1fr
+    }
+    .upgrade-item {
+      display: inline-block;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #0cb4df;
+      border-radius: 5px;
+      width: 150px;
+      height: 150px;
+      justify-self: center;
+      text-align: center;
+    }
+  }
