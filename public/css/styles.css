@@ -223,12 +223,12 @@ footer p {
 }
 
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 600px) {
   body {
     margin: 20px auto;
     padding: 0px;
     max-width: 80%;
-    background-image: url("https://raw.githubusercontent.com/VergaraJames/newrepo/main/public/images/site/checkerboard.jpg");
+    background-image: url("../images/site/checkerboard.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
