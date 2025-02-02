@@ -74,12 +74,13 @@ nav ul {
   display: flex;
   justify-content: space-around;
 }
-
+/*
 nav ul li {
-  padding: 10px 20px;
+  padding: 10px 10px;
   font-size: 18px;
   color: var(--White);
 }
+*/
 
 nav ul li a {
   color: var(--White);
