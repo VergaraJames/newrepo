@@ -1,0 +1,10 @@
+<!-- The Error page -->
+<% if (title) { %>
+    <h1><%= title %></h1>
+    <% } else {
+      res.redirect('/')
+    } %>
+
+<!-- A Message Block -->
+<%- message %>
+<p>Something's wrong here... </p> 
