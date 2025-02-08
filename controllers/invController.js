@@ -15,7 +15,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     let nav = await utilities.getNav()
     return res.render("./errors/error", {
       title: "No Vehicles Found",
-      message: "No vehicles match this classification.",
+      message: "No vehicles Found.",
       nav
     });
   }
