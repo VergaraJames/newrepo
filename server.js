@@ -37,6 +37,12 @@ app.get("/", baseController.buildHome)
 // Inventory routes
 app.use("/inv", inventoryRoute)
 
+// Server crash
+app.get("/trigger-500-error", (req, res, next) => {
+  const undefinedValue = undefined;
+  undefinedValue.ExistentProperty;
+});
+
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
