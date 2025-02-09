@@ -213,6 +213,29 @@ ul.custom-bullet {
   height: auto;
 }
 
+
+/* Vehicle details */
+
+.vehicle-details {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+  border: 1px solid var(--White);
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.vehicle-image {
+  margin-bottom: 20px;
+}
+
+.vehicle-image img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 /* Footer */
 footer {
   width: 100%;
