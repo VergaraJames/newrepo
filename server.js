@@ -47,18 +47,13 @@ app.set("layout", "./layouts/layout") // not at views root
 /* ***********************
  * Routes
  *************************/
-app.use(static)
+app.use(require("./routes/static"))
 // Index route - Unit 3, activity
 app.get("/", utilities.handleErrors(baseController.buildHome))
 // Inventory routes - Unit 3, activity
 app.use("/inv", require("./routes/inventoryRoute"))
-
-/* ***********************
- * Index route
- *************************/
-app.get("/", baseController.buildHome)
-// Inventory routes
-app.use("/inv", inventoryRoute)
+// Account routes - Unit 4, Activity
+app.use("/account", require("./routes/accountRoute"))
 
 // Server crash
 app.get("/trigger-500-error", (req, res, next) => {
