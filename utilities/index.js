@@ -1,19 +1,7 @@
+// This utility file contains helper functions for various tasks like navigation building and HTML formatting.
+
 const invModel = require("../models/inventory-model")
 const Util = {}
-
-/* ****************************************
-*  Deliver login view
-* *************************************** */
-async function buildLogin(req, res, next) {
-  let nav = await utilities.getNav()
-  res.render("account/login", {
-    title: "Login",
-    nav,
-  })
-}
-
-module.exports = { buildLogin }
-
 
 /* ************************
  * Constructs the nav HTML unordered list

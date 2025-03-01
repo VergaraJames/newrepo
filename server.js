@@ -77,6 +77,7 @@ app.use(async (req, res, next) => {
 /* ***********************
  * Express Error Handler
  * Place after all other middleware
+ * Unit 3, Basic Error Handling Activity
  *************************/
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav();
