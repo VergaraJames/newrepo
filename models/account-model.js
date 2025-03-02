@@ -2,6 +2,7 @@ const pool = require("../database/")
 
 /* *****************************
 *   Register new account
+*   From guide https://blainerobertson.github.io/340-js/views/account-process-register.html
 * *************************** */
 async function registerAccount(account_firstname, account_lastname, account_email, account_password){
     try {

@@ -19,7 +19,7 @@ const accountRoute = require("./routes/accountRoute");
 const bodyParser = require("body-parser");
 
 /* ***********************
- * Middleware
+ * Middleware (From video https://www.youtube.com/watch?v=bJG6d7rRusU)
  * ************************/
 app.use(
   session({
@@ -35,10 +35,15 @@ app.use(
 );
 
 // for parsing application/x-www-form-urlencoded
+//  Process Registration
+// Unit 4 Process registration activity
+// From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+// Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true })) 
 
 // Express Messages Middleware
+// From instructions https://blainerobertson.github.io/340-js/views/session-message.html
 app.use(require("connect-flash")());
 app.use(function (req, res, next) {
   res.locals.messages = require("express-messages")(req, res);
@@ -60,8 +65,13 @@ app.use(require("./routes/static"));
 app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes - Unit 3, activity
 app.use("/inv", require("./routes/inventoryRoute"));
+
 // Account routes - Unit 4, Activity
+// from guide https://blainerobertson.github.io/340-js/views/account-registration.html 
 app.use("/account", require("./routes/accountRoute"));
+// from guide https://blainerobertson.github.io/340-js/views/account-registration.html
+// Route to build login view
+router.get("/login", utilities.handleErrors(accountController.buildLogin))
 
 // Server crash
 app.get("/trigger-500-error", (req, res, next) => {

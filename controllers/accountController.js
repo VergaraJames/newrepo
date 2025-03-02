@@ -1,11 +1,11 @@
 /* *****************************
  * Account Controller
  * Unit 4, deliver login view activity
+ * From video (https://www.youtube.com/watch?v=5H0aIxO1oC0)
 ******************************** */
 const accountModel = require("../models/account-model")
 const utilities = require("../utilities/")
 const bcrypt = require("bcryptjs")
-
 
 /* ****************************************
 *  Deliver login view
@@ -20,7 +20,9 @@ async function buildLogin(req, res, next) {
 
 /* ****************************************
  *  Deliver registration view
- * *************************************** */
+ * *************************************** 
+ * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0 
+ * from guide https://blainerobertson.github.io/340-js/views/account-registration.html */
 async function buildRegister(req, res, next) {
   let nav = await utilities.getNav()
   res.render("account/register", {
@@ -32,6 +34,9 @@ async function buildRegister(req, res, next) {
 
 /* ****************************************
 *  Process Registration
+*  Unit 4 Process registration activity
+*  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+*  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
 * *************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav()
@@ -55,7 +60,6 @@ async function registerAccount(req, res) {
       errors: null,
     })
   }
-
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
@@ -80,10 +84,13 @@ async function registerAccount(req, res) {
     })
   }
 }
-
+  
 /* ****************************************
- *  Process Login
- * *************************************** */
+*  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+*  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
+* *****************************************
+*  Process Login
+* *************************************** */
 async function processLogin(req, res, next) {
   let nav = await utilities.getNav()
   const { account_email, account_password } = req.body
@@ -102,4 +109,8 @@ async function processLogin(req, res, next) {
   res.redirect("/account/")
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, processLogin }
+module.exports = { 
+  buildLogin, 
+  buildRegister, 
+  registerAccount, 
+  processLogin }

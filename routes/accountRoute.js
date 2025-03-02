@@ -16,9 +16,10 @@ router.get("login", utilities.handleErrors(accountController.buildLogin));
 /* ***************************************
  * Account routes
  * Unit 4, deliver Register view activity
+ * from video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * **************************************/
-// Route to deliver register view
-router.get("/register", utilities.handleErrors(accountController.buildRegister))
+// Route to deliver login view
+router.get("/login", utilities.handleErrors(accountController.buildRegister))
 
 // Process the registration data
 router.post("/register", regValidate.registationRules(), regValidate.checkRegData, utilities.handleErrors(accountController.registerAccount))

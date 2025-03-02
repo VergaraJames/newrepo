@@ -1,37 +1,44 @@
 <div class="register">
-  <h1><%= title %></h1>
+  <h1>
+    <%= title %>
+  </h1>
   <p><%- messages() %></p>
   <% if (errors) { %>
-      <ul class="notice">
-     <% errors.array().forEach(error => { %>
-       <li><%- error.msg.replace(/\n/g, '<br>') %></li>
-    <%  }) %>
-     </ul>
+    <ul class="notice">
+      <% errors.array().forEach(error=> { %>
+        <li><%- error.msg.replace(/\n/g, '<br>' ) %></li>
+        <% }) %>
+    </ul>
     <% } %>
-  <form action="/account/register" method="post">
-      <form action="/account/register" method="post">
+    <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
+    <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
+    <div id="registerContainer">
+        <p> All fields are requiered.</p>
+        <form action="/account/register" method="post">
           <label for="account_firstname">First Name:</label>
-          <input type="text" name="account_firstname" id="account_firstname" required value="<%= locals.account_firstname %>">
-          
+          <input type="text" name="account_firstname" id="account_firstname" required
+            value="<%= locals.account_firstname %>">
+
           <label for="account_lastname">Last Name:</label>
-          <input type="text" name="account_lastname" id="account_lastname" required value="<%= locals.account_lastname %>">
-          
+          <input type="text" name="account_lastname" id="account_lastname" required
+            value="<%= locals.account_lastname %>">
+
           <label for="account_email">Email:</label>
           <input type="email" name="account_email" id="account_email" required value="<%= locals.account_email %>">
-          
-      <div class="password-requirements">
-        <p>Password must be at least 8 characters and contain:</p>
-        <ul>
-          <li>1 number</li>
-          <li>1 capital letter</li>
-          <li>1 special character</li>
-        </ul>
+
+          <div class="password-requirements">
+            <p>Password must be at least 8 characters and contain:</p>
+            <ul>
+              <li>1 number</li>
+              <li>1 capital letter</li>
+              <li>1 special character</li>
+            </ul>
+          </div>
+          <label for="account_password">Password:</label>
+          <input type="password" id="account_password" name="account_password" required
+            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$" placeholder="Enter your password">
+
+          <button type="submit">Register</button>
+        </form>
       </div>
-      <label for="account_password">Password:</label>
-      <input type="password" id="account_password" name="account_password" required 
-             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$" 
-             placeholder="Enter your password">
-      
-      <button type="submit">Register</button>
-  </form>
 </div>

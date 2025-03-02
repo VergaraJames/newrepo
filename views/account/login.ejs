@@ -1,3 +1,4 @@
+<!-- The Login page -->
 <div class="login">
     <h1><%= title %></h1>
     <% if (locals.errors) { %>
@@ -7,6 +8,8 @@
         <% }) %>
       </ul>
     <% } %>
+
+    <!-- From the video https://www.youtube.com/watch?v=5H0aIxO1oC0 -->
     <p><%- messages() %></p>
     <form id="loginForm" action="/account/login" method="post">
       <label for="account_email">Email</label>
@@ -17,5 +20,5 @@
       
       <button type="submit">Login</button>
     </form>
-    <p>Don't have an account? <a href="/account/register">Register here</a></p>
+    <p>Don't have an account? <a href="/account/register">Sign-up here</a></p>
   </div>

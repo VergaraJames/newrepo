@@ -5,6 +5,7 @@
   --whitesmoke: whitesmoke;
   --black: black;
   --red:red;
+  --greenlt:rgb(93, 133, 93);
 }
 
 /* Styles all sections */
@@ -116,6 +117,70 @@ ul.custom-bullet {
   display: flex;
   flex-wrap: wrap;
 }
+
+/* Login */
+.register .password-requirements {
+  font-size: 0.8em;
+  margin-bottom: 10px;
+  color: var(--secondary-color);
+}
+
+.password-requirements ul {
+  margin-left: 20px;
+}
+
+input:required:invalid, input:focus:invalid {
+  border: 2px solid var(--red);
+}
+
+input:required:valid {
+  border: 2px solid var(--greenlt);
+}
+
+form {
+  max-width: 300px;
+  margin: 0 auto;
+}
+form + p {
+  text-align: center;
+  margin-top: 20px; 
+}
+
+label, input, button {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--White);
+  border-radius: 4px;
+}
+
+button {
+  background-color: var(--bg_blue);
+  color: var(--White);
+  padding: 10px 15px;
+  margin: 10px 0px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: va(--bg_blue);
+}
+
+a {
+  color: var(--whitesmoke);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 
 /* Picture Section*/
 .picture-section {
@@ -295,5 +360,11 @@ footer p {
   ul.custom-bullet li {
     flex: 1;
     margin-right: 10px;
+  }
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 25px;
   }
 }
