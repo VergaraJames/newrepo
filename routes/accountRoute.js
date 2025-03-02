@@ -1,9 +1,9 @@
-// Needed Resources 
-const express = require("express")
-const router = new express.Router() 
-const accountController = require("../controllers/accountController")
-const utilities = require("../utilities")
-const regValidate = require('../utilities/account-validation')
+// Needed Resources
+const express = require("express");
+const router = new express.Router();
+const accountController = require("../controllers/accountController");
+const utilities = require("../utilities");
+const regValidate = require("../utilities/account-validation");
 
 /* ***************************************
  * Account routes
@@ -19,10 +19,16 @@ router.get("login", utilities.handleErrors(accountController.buildLogin));
  * from video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * **************************************/
 // Route to deliver login view
-router.get("/login", utilities.handleErrors(accountController.buildRegister))
+router.get("/login", utilities.handleErrors(accountController.buildRegister));
 
 // Process the registration data
-router.post("/register", regValidate.registationRules(), regValidate.checkRegData, utilities.handleErrors(accountController.registerAccount))
+// from guide https://blainerobertson.github.io/340-js/views/server-validation.html
+router.post(
+  "/register",
+  regValidate.registrationRules(),
+  regValidate.checkRegData,
+  utilities.handleErrors(accountController.registerAccount)
+);
 
 /* ***************************************
  * Account routes
@@ -30,13 +36,20 @@ router.post("/register", regValidate.registationRules(), regValidate.checkRegDat
  * **************************************/
 // Error handling middleware
 router.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send("Something broke!")
-})
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 // Process the login attempt
 // This is how it will handle it later once the login process is built
 // utilities.handleErrors(accountController.processLogin)
-router.post("/login", regValidate.loginRules(), regValidate.checkLoginData, (req, res) => {res.status(200).send('login process complete')})
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  (req, res) => {
+    res.status(200).send("login process complete");
+  }
+);
 
 module.exports = router;

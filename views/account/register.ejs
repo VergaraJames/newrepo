@@ -3,6 +3,7 @@
     <%= title %>
   </h1>
   <p><%- messages() %></p>
+  <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
   <% if (errors) { %>
     <ul class="notice">
       <% errors.array().forEach(error=> { %>
@@ -10,9 +11,9 @@
         <% }) %>
     </ul>
     <% } %>
-    <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
-    <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
-    <div id="registerContainer">
+      <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
+      <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
+      <div id="registerContainer">
         <p> All fields are requiered.</p>
         <form action="/account/register" method="post">
           <label for="account_firstname">First Name:</label>

@@ -4,8 +4,10 @@ const utilities = require(".")
 
   /*  **********************************
   *  Registration Data Validation Rules
+  *  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
+  *  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
   * ********************************* */
-  validate.registationRules = () => {
+  validate.registrationRules = () => {
     return [
       // firstname is required and must be string
       body("account_firstname")
@@ -49,6 +51,8 @@ const utilities = require(".")
 
   /* ******************************
  * Check data and return errors or continue to registration
+ *  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
+ *  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
  * ***************************** */
 validate.checkRegData = async (req, res, next) => {
     const { account_firstname, account_lastname, account_email } = req.body

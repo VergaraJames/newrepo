@@ -129,6 +129,7 @@ ul.custom-bullet {
   margin-left: 20px;
 }
 
+/* Styles from guide https://blainerobertson.github.io/340-js/views/clientside-validation.html */
 input:required:invalid, input:focus:invalid {
   border: 2px solid var(--red);
 }
