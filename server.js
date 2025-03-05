@@ -10,16 +10,20 @@ const pool = require("./database/");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
-const baseController = require("./controllers/baseController");
+const bodyParser = require("body-parser");
 const app = express();
-const inventoryRoute = require("./routes/inventoryRoute");
+
 const utilities = require("./utilities/index");
+
+const baseController = require("./controllers/baseController");
+
 const static = require("./routes/static");
 const accountRoute = require("./routes/accountRoute");
-const bodyParser = require("body-parser");
+const inventoryRoute = require("./routes/inventoryRoute");
 
 /* ***********************
- * Middleware (From video https://www.youtube.com/watch?v=bJG6d7rRusU)
+ * Middleware 
+ * (From video https://www.youtube.com/watch?v=bJG6d7rRusU)
  * ************************/
 app.use(
   session({
@@ -39,8 +43,8 @@ app.use(
 // Unit 4 Process registration activity
 // From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
 // Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true })) 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express Messages Middleware
 // From instructions https://blainerobertson.github.io/340-js/views/session-message.html
@@ -67,7 +71,7 @@ app.get("/", utilities.handleErrors(baseController.buildHome));
 app.use("/inv", require("./routes/inventoryRoute"));
 
 // Account routes - Unit 4, Activity
-// from guide https://blainerobertson.github.io/340-js/views/account-registration.html 
+// from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 app.use("/account", require("./routes/accountRoute"));
 
 // Server crash

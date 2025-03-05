@@ -19,6 +19,34 @@ async function buildLogin(req, res, next) {
 }
 
 /* ****************************************
+ *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+ *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
+ * *****************************************
+ *  ProcessLogin
+ * *************************************** */
+async function processLogin(req, res, next) {
+  let nav = await utilities.getNav();
+  const { account_email, account_password } = req.body;
+
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  if (
+    !accountData ||
+    !bcrypt.compareSync(account_password, accountData.account_password)
+  ) {
+    req.flash("notice", "Invalid email or password.");
+    return res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      account_email,
+    });
+  }
+
+  req.flash("notice", `Welcome back, ${accountData.account_firstname}!`);
+  res.redirect("/account/");
+}
+
+
+/* ****************************************
  *  Deliver registration view
  * ***************************************
  * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0
@@ -59,7 +87,7 @@ async function registerAccount(req, res) {
       "Sorry, there was an error processing the registration."
     );
     res.status(500).render("account/register", {
-      title: "Registration",
+      title: "Register",
       nav,
       errors: null,
     });
@@ -74,7 +102,7 @@ async function registerAccount(req, res) {
   if (regResult) {
     req.flash(
       "notice",
-      `Congratulations, you\'re registered ${account_firstname}. Please log in.`
+      `Congratulations, you are registered ${account_firstname}. Please log in.`
     );
     res.status(201).render("account/login", {
       title: "Login",
@@ -83,38 +111,12 @@ async function registerAccount(req, res) {
   } else {
     req.flash("notice", "Sorry, the registration failed.");
     res.status(501).render("account/register", {
-      title: "Registration",
+      title: "Register",
       nav,
     });
   }
 }
 
-/* ****************************************
- *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
- *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
- * *****************************************
- *  Process Login
- * *************************************** */
-async function processLogin(req, res, next) {
-  let nav = await utilities.getNav();
-  const { account_email, account_password } = req.body;
-
-  const accountData = await accountModel.getAccountByEmail(account_email);
-  if (
-    !accountData ||
-    !bcrypt.compareSync(account_password, accountData.account_password)
-  ) {
-    req.flash("notice", "Invalid email or password.");
-    return res.status(400).render("account/login", {
-      title: "Login",
-      nav,
-      account_email,
-    });
-  }
-
-  req.flash("notice", `Welcome back, ${accountData.account_firstname}!`);
-  res.redirect("/account/");
-}
 
 module.exports = {
   buildLogin,

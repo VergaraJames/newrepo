@@ -1,24 +1,29 @@
 <!-- The Login page -->
 <div class="login">
-    <h1><%= title %></h1>
-    <% if (locals.errors) { %>
-      <ul class="error-list">
-        <% errors.forEach(error => { %>
-          <li><%= error.msg %></li>
+  <h1>
+    <%= title %>
+  </h1>
+  <% if (locals.errors) { %>
+    <ul class="error-list">
+      <% errors.forEach(error=> { %>
+        <li>
+          <%= error.msg %>
+        </li>
         <% }) %>
-      </ul>
+    </ul>
     <% } %>
 
-    <!-- From the video https://www.youtube.com/watch?v=5H0aIxO1oC0 -->
-    <p><%- messages() %></p>
-    <form id="loginForm" action="/account/login" method="post">
-      <label for="account_email">Email</label>
-      <input type="email" id="account_email" name="account_email" required value="<%= locals.account_email || '' %>">
-  
-      <label for="account_password">Password:</label>
-      <input type="password" id="account_password" name="account_password" required>
-      
-      <button type="submit">Login</button>
-    </form>
-    <p>Don't have an account? <a href="/account/register">Sign-up here</a></p>
-  </div>
+      <!-- From the video https://www.youtube.com/watch?v=5H0aIxO1oC0 -->
+      <p><%- messages() %></p>
+      <form id="loginForm" action="/account/login" method="post">
+        <label for="account_email">Email</label>
+        <input type="email" id="account_email" name="account_email" required value="<%= locals.account_email || '' %>">
+
+        <label for="account_password">Password:</label>
+        <input type="password" id="account_password" name="account_password" required>
+
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a href="/account/register">Sign-up here</a></p>
+      </form>
+
+</div>
