@@ -1,12 +1,13 @@
 /* Styles all sections */
 body {
-  --bg_blue: #4c96d7;
+  --bg_blue: #88abeb;
   --secondary-color: #333;
   --White: white;
   --whitesmoke: whitesmoke;
   --black: black;
   --red: red;
-  --greenlt: rgb(93, 133, 93);
+  --greenlt: rgb(208, 248, 233);
+  
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 10px;
@@ -553,5 +554,11 @@ footer {
 
   .vehicle-content {
     flex: 1 1 50%;
+    margin: 20px;
+  border: 1px solid var(--bg_blue);
+  border-radius: 8px;
+  padding: 20px;
+  background-color: var(--greenlt);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 }
