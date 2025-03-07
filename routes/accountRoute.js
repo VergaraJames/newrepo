@@ -11,20 +11,33 @@ const regValidate = require("../utilities/account-validation");
  * from video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * **************************************/
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
+
 // Route to build login view
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
+// Process the login attempt
+// This is how it will handle it later once the login process is built
+// utilities.handleErrors(accountController.processLogin)
+router.post("/login",
+  regValidate.loginRules(), 
+  regValidate.checkLoginData, 
+  utilities.handleErrors(accountController.accountLogin),
+  (req, res) => {
+    res.status(200).send("login process complete");
+  }
+);
 
 // Route to build login view
-router.get("/register", utilities.handleErrors(accountController.buildRegister))
-
+router.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
 // Process the registration data
 // from guide https://blainerobertson.github.io/340-js/views/server-validation.html
-router.post(
-  "/register",
+router.post('/register',
   regValidate.registrationRules(),
   regValidate.checkRegData,
-  utilities.handleErrors(accountController.registerAccount)
+  utilities.handleErrors(accountController.registerAccount),
+  (req, res) => {
+    res.status(200).send("Register process complete");
+  }
 );
 
 /* ***************************************
@@ -36,17 +49,5 @@ router.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
-
-// Process the login attempt
-// This is how it will handle it later once the login process is built
-// utilities.handleErrors(accountController.processLogin)
-router.post(
-  "/login",
-  regValidate.loginRules(),
-  regValidate.checkLoginData,
-  (req, res) => {
-    res.status(200).send("login process complete");
-  }
-);
 
 module.exports = router;

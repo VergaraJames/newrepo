@@ -11,6 +11,8 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const env = require("dotenv").config();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser")
+
 const app = express();
 
 const utilities = require("./utilities/index");
@@ -64,7 +66,7 @@ app.set("layout", "./layouts/layout"); // not at views root
 /* ***********************
  * Routes
  *************************/
-app.use(require("./routes/static"));
+app.use(static);
 // Index route - Unit 3, activity
 app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes - Unit 3, activity

@@ -124,7 +124,12 @@ h1 {
 .register .password-requirements {
   font-size: 0.8em;
   color: #666;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+}
+.login .password-requirements {
+  font-size: 0.8em;
+  color: #666;
+  margin-bottom: 15px;
 }
 
 .password-requirements ul {
@@ -137,7 +142,7 @@ input:focus:invalid {
 }
 
 input:required:valid {
-  border: 2px solid green;
+  border: 2px solid rgb(8, 235, 42);
 }
 
 /* Main page */
