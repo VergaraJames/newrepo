@@ -1,10 +1,16 @@
 <!-- The Error page -->
-<div class="error-page">
-  <h1><%= title %></h1>
-  <p><%- messages() %></p>
+<div class="error_page">
+  <% if (title) { %>
+    <h1> <%= title %></h1>
+  <% } else {
+    res.redirect('/')
+  } %>
+  
+  <% if (title == 404 || title == "404") { %>
+    <img src="/images/site/lost.png" alt="Injured person">
+  <% } else { %>
+   <img src="/images/site/injured.png" alt="Injured person">
+  <% } %>
 
-  <div class="fun-section">
-    <p>Don't worry—it's not you, it's us (probably).</p>
-    <p>Something's wrong here... </p> 
-  </div>
+  <h3><%= message %></h3>
 </div>

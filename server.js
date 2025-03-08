@@ -46,11 +46,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express Messages Middleware
 // From instructions https://blainerobertson.github.io/340-js/views/session-message.html
-app.use(require('connect-flash')());
+app.use(require("connect-flash")())
 app.use(function (req, res, next) {
-  res.locals.messages = require('express-messages')(req, res);
-  next();
-});
+  res.locals.messages = require("express-messages")(req, res)
+  next()
+})
 
 /* ***********************
  * View Engine and Templates
@@ -63,15 +63,15 @@ app.set("layout", "./layouts/layout"); // not at views root
  * Routes
  *************************/
 app.use(static);
-// Index route - Unit 3, activity
-
-app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes - Unit 3, activity
 app.use("/inv", require("./routes/inventoryRoute"));
-
 // Account routes - Unit 4, Activity
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 app.use("/account", require("./routes/accountRoute"));
+
+
+// Index route - Unit 3, activity
+app.get("/", utilities.handleErrors(baseController.buildHome));
 
 // Server crash
 app.get("/trigger-500-error", (req, res, next) => {
@@ -79,7 +79,7 @@ app.get("/trigger-500-error", (req, res, next) => {
   undefinedValue.ExistentProperty;
 });
 
-// File Not Found Route - must be last route in list
+// 404 File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
   next({ status: 404, message: "Sorry, we appear to have lost that page." });
 });
@@ -90,19 +90,15 @@ app.use(async (req, res, next) => {
  * Unit 3, Basic Error Handling Activity
  *************************/
 app.use(async (err, req, res, next) => {
-  let nav = await utilities.getNav();
-  console.error(`Error at: "${req.originalUrl}": ${err.message}`);
-  if (err.status == 404) {
-    message = err.message;
-  } else {
-    message = "Error! - Try a different route?";
-  }
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
+  if (err.status == 404) { message = err.message } else { message = "Oh no! There was a crash. Maybe try a different route?" }
   res.render("errors/error", {
-    title: err.status || "Server Error",
+    title: err.status || 'Server Error',
     message,
-    nav,
-  });
-});
+    nav
+  })
+})
 
 /* ***********************
  * Local Server Information

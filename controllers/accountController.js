@@ -6,7 +6,7 @@
 const accountModel = require("../models/account-model");
 const utilities = require("../utilities/");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 /* ****************************************
@@ -77,7 +77,6 @@ async function registerAccount(req, res) {
       errors: null,
     })
   }
-
   const regResult = await accountModel.registerAccount(
     account_firstname,
     account_lastname,
@@ -115,37 +114,33 @@ async function accountLogin(req, res, next) {
   const { account_email, account_password } = req.body;
   const accountData = await accountModel.getAccountByEmail(account_email);
 
-  if (!accountData || !bcrypt.compareSync(account_password, accountData.account_password)) {
-    req.flash("notice", "Invalid email or password. Try again");
-    return res.status(400).render("account/login", {
+  if (!accountData) {
+  req.flash("notice", "Please check your credentials and try again.")
+    res.status(400).render("account/login", {
       title: "Login",
       nav,
-      account_email,
-    });
+      errors: null,
+      account_email
+    })
     return
   }
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 })
-      if (process.env.NODE_ENV === 'development') {
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+      if (process.env.NODE_ENV === "development") {
         res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
       } else {
         res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
       }
       return res.redirect("/account/")
-    }
-    else {
-      req.flash("message notice", "Password is incorrect. Try again.")
-      res.status(400).render("account/login", {
-        title: "Login",
-        nav,
-        errors: null,
-        account_email,
-      })
+    } else {
+      req.flash("notice", "Please check your credentials and try again.")
+      res.status(501).redirect("/account/login")
     }
   } catch (error) {
-    throw new Error('Access Forbidden')
+    req.flash("notice", "Please check your credentials and try again.")
+    res.status(501).redirect("/account/login")
   }
 }
 

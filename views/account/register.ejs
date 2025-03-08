@@ -1,16 +1,21 @@
 <!-- The Register page -->
+<% if (title) { %>
+  <h1> <%= title %></h1>
+<% } else {
+  res.redirect('/')
+} %>
+
+<%- messages() %>
+
+<% if (errors) { %>
+  <ul class="notice">
+ <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+<%  }) %>
+ </ul>
+<% } %>
+
 <div class="register">
-  <h1><%= title %></h1>
-  <p><%- messages() %></p>
-    <% if (locals.errors && locals.errors.length> 0) { %>
-      <ul class="notice">
-        <% locals.errors.forEach(error=> { %>
-          <li>
-            <%= error.msg %>
-          </li>
-          <% }) %>
-      </ul>
-      <% } %>
         <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
         <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
         <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
@@ -40,6 +45,6 @@
           <input type="password" id="account_password" name="account_password" required
             pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$" placeholder="Enter your password">
           <!-- <div id="pswdBtn">Show Password</div> -->
-          <button type="submit">Register</button>
+          <input type="submit" value="SIGN UP">
         </form>
 </div>

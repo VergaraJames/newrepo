@@ -1,6 +1,7 @@
 const utilities = require(".")
 const { body, validationResult } = require("express-validator")
 const validate = {}
+const accountModel = require("../models/account-model")
 
 /*  **********************************
 *  Registration Data Validation Rules
@@ -27,16 +28,18 @@ validate.registrationRules = () => {
 
     // valid email is required and cannot already exist in the DB
     body("account_email")
-      .trim()
-      .isEmail()
-      .normalizeEmail() // refer to validator.js docs
-      .withMessage("A valid email is required.")
-      .custom(async (account_email) => {
-        const emailExist =await accountModel.checkExistingEMail(account_email)
-        if (emailExist) {
-          throw new Error("Email exist. Please log in or use different email")
-        }
-      }),
+    .trim()
+    .escape()
+    .notEmpty()
+    .isEmail()
+    .normalizeEmail()
+    .withMessage("A valid email is required.")
+    .custom(async (account_email) => {
+      const emailExists = await accountModel.checkExistingEmail(account_email)
+      if (emailExists) {
+        throw new Error("Email exists. Please log in or use different email")
+      }
+    }),
 
     // password is required and must be strong password
     body("account_password")
@@ -82,19 +85,18 @@ validate.checkRegData = async (req, res, next) => {
 * ********************************* */
 validate.loginRules = () => {
   return [
-    // Email is required and must be a valid format
     body("account_email")
       .trim()
+      .escape()
+      .notEmpty()
       .isEmail()
       .normalizeEmail()
-      .withMessage("A valid email is required."),
-
-    // Password is required
+      .withMessage("A valid email is required"),
     body("account_password")
       .trim()
+      .escape()
       .notEmpty()
-      .isLength({ min: 1 })
-      .withMessage("Please provide a password."),
+      .withMessage("Invalid password")
   ]
 }
 
@@ -107,7 +109,7 @@ validate.checkLoginData = async (req, res, next) => {
   errors = validationResult(req)
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()
-    res.render("account/login", {
+    res.render("account/register", {
       errors,
       title: "Login",
       nav,
@@ -118,13 +120,22 @@ validate.checkLoginData = async (req, res, next) => {
   }
   next()
 }
+/* ******************************
+ * Check password rules and return errors or continue to login
+ * ***************************** */
+validate.passwordRules = () => {
+  return [body("account_password")
+    .trim()
+    .notEmpty()
+    .isStrongPassword({
+      minLength: 12,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1
+    })
+    .withMessage("Password does not meet requirements.")]
+}
+
 
 module.exports = validate
-/*
-{
-  registrationRules: validate.registrationRules,
-  checkRegData: validate.checkRegData,
-  loginRules: validate.loginRules,
-  checkLoginData: validate.checkLoginData
-}
-*/

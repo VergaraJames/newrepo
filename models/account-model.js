@@ -1,4 +1,5 @@
 const pool = require("../database/")
+const { check } = require("express-validator")
 
 /* *****************************
 *   Register new account
@@ -46,4 +47,12 @@ async function getAccountByEmail (account_email) {
   }
 }
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail }
+async function getAccountById(account_id) {
+  try {
+    const result = await pool.query('SELECT account_firstname, account_lastname, account_email, account_id, account_type FROM account WHERE account_id = $1', [account_id])
+    return result.rows[0]
+  } catch (error) {
+    return new Error("No matching email found")
+  }
+}
+module.exports = { registerAccount, checkExistingEmail, getAccountByEmail, getAccountById}
