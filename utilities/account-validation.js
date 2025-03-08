@@ -120,13 +120,11 @@ validate.checkLoginData = async (req, res, next) => {
 }
 
 module.exports = validate
-
-/* ******************************
-
-module.exports = {
+/*
+{
   registrationRules: validate.registrationRules,
   checkRegData: validate.checkRegData,
   loginRules: validate.loginRules,
   checkLoginData: validate.checkLoginData
 }
-  */ 
+*/

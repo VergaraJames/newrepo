@@ -5,23 +5,19 @@
 /* ***********************
  * Require Statements
  *************************/
-const session = require("express-session");
-const pool = require("./database/");
-const express = require("express");
-const expressLayouts = require("express-ejs-layouts");
-const env = require("dotenv").config();
-const bodyParser = require("body-parser");
+const express = require("express")
+const expressLayouts = require("express-ejs-layouts")
+const env = require("dotenv").config()
+const app = express()
+const static = require("./routes/static")
+const baseController = require("./controllers/baseController")
+const inventoryRoute = require("./routes/inventoryRoute")
+const utilities = require("./utilities/")
+const session = require("express-session")
+const pool = require('./database')
+const accountRoute = require('./routes/accountRoute');
+const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
-
-const app = express();
-
-const utilities = require("./utilities/index");
-
-const baseController = require("./controllers/baseController");
-
-const static = require("./routes/static");
-const accountRoute = require("./routes/accountRoute");
-const inventoryRoute = require("./routes/inventoryRoute");
 
 /* ***********************
  * Middleware 
@@ -50,9 +46,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express Messages Middleware
 // From instructions https://blainerobertson.github.io/340-js/views/session-message.html
-app.use(require("connect-flash")());
+app.use(require('connect-flash')());
 app.use(function (req, res, next) {
-  res.locals.messages = require("express-messages")(req, res);
+  res.locals.messages = require('express-messages')(req, res);
   next();
 });
 
@@ -68,6 +64,7 @@ app.set("layout", "./layouts/layout"); // not at views root
  *************************/
 app.use(static);
 // Index route - Unit 3, activity
+
 app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes - Unit 3, activity
 app.use("/inv", require("./routes/inventoryRoute"));

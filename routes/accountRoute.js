@@ -14,6 +14,9 @@ const regValidate = require("../utilities/account-validation");
 
 // Route to build login view
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
+// Route to build register view
+router.get("/register", utilities.handleErrors(accountController.buildRegister))
+
 // Process the login attempt
 // This is how it will handle it later once the login process is built
 // utilities.handleErrors(accountController.processLogin)
@@ -25,9 +28,6 @@ router.post("/login",
     res.status(200).send("login process complete");
   }
 );
-
-// Route to build login view
-router.get("/register", utilities.handleErrors(accountController.buildRegistration))
 
 // Process the registration data
 // from guide https://blainerobertson.github.io/340-js/views/server-validation.html
