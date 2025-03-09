@@ -5,9 +5,9 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 const validate = require("../utilities/inventory-validation")
 
-router.get("/", utilities.checkAccessRights, utilities.handleErrors(invController.buildInventoryManagement))
-// Build management view
-router.get("/management", utilities.handleErrors(invController.buildManagementView))
+router.get("/", utilities.handleErrors(invController.buildManagementView));
+router.get("/management", utilities.handleErrors(invController.buildManagementView));
+
 // Route to build inventory by classification view
 router.get('/type/:classificationId', utilities.handleErrors(invController.buildByClassificationId));
 // New route for individual vehicle details
@@ -38,3 +38,6 @@ router.use((err, req, res, next) => {
 })
 
 module.exports = router;
+
+// Build management view
+// router.get("/management", utilities.handleErrors(invController.buildManagementView))
