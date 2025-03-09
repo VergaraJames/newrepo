@@ -1,6 +1,7 @@
 /* Styles all sections */
 body {
   --colorLogin: #d2e1de;
+  --colorUpgrades: #50a0c6;
   --borderlogin:#3833a1;
   --colorNotice: #f4d4d4;
   --borderNotice:#055972; 
@@ -144,7 +145,7 @@ h1 {
 
 input:required:invalid,
 input:focus:invalid {
-  border: 2px solid red;
+  border: 2px solid var(--red);
 }
 
 input:required:valid {
@@ -231,7 +232,7 @@ input:required:valid {
 .upgrade-item {
   margin: 10px 0;
   padding: 20px;
-  background-color: var(--colorFields);
+  background-color: var(--colorUpgrades);
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -380,7 +381,7 @@ form p {
   margin-top: 5px;
   font-family: Arial, serif;
   font-size: 0.8em;
-  padding: 8px auto;
+  padding: 8px;
 }
 
 label,
