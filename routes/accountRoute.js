@@ -12,9 +12,9 @@ const regValidate = require("../utilities/account-validation");
  * **************************************/
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 
-// Route to build login view
+// Routes to build something
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountsController.buildAccount))
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
-// Route to build register view
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 // Process the login attempt

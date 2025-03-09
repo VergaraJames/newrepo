@@ -22,6 +22,48 @@ async function buildLogin(req, res, next) {
 }
 
 /* ****************************************
+ *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+ *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
+ * *****************************************
+ *  Process Login
+ * *************************************** */
+async function accountLogin(req, res, next) {
+  let nav = await utilities.getNav();
+  const { account_email, account_password } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+
+  if (!accountData) {
+  req.flash("notice", "Please check your credentials and try again.")
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email
+    })
+    return
+  }
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
+      if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+      } else {
+        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+      }
+      return res.redirect("/account/")
+    } else {
+      req.flash("notice", "Please check your credentials and try again.")
+      res.status(501).redirect("/account/login")
+    }
+  } catch (error) {
+    req.flash("notice", "Please check your credentials and try again.")
+    res.status(501).redirect("/account/login")
+  }
+}
+
+
+/* ****************************************
  *  Deliver registration view
  * ***************************************
  * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0
@@ -34,18 +76,6 @@ async function buildRegister(req, res, next) {
     nav,
     errors: null,
   });
-}
-
-/* ****************************************
- *  Deliver management view
- * *************************************** */
-async function buildManagement(req, res, next) {
-  let nav = await utilities.getNav()
-  res.render("account/management", {
-    title: "Account Management",
-    nav,
-    errors: null
-  })
 }
 
 
@@ -97,51 +127,25 @@ async function registerAccount(req, res) {
   } else {
     req.flash("notice", "Sorry, the registration failed.")
     res.status(501).render("account/register", {
-      title: "Registration",
+      title: "Registrater",
       nav,
+      errors:null
     })
   }
 }
 
 /* ****************************************
- *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
- *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
- * *****************************************
- *  Process Login
+ *  Deliver management view
  * *************************************** */
-async function accountLogin(req, res, next) {
-  let nav = await utilities.getNav();
-  const { account_email, account_password } = req.body;
-  const accountData = await accountModel.getAccountByEmail(account_email);
-
-  if (!accountData) {
-  req.flash("notice", "Please check your credentials and try again.")
-    res.status(400).render("account/login", {
-      title: "Login",
-      nav,
-      errors: null,
-      account_email
-    })
-    return
-  }
-  try {
-    if (await bcrypt.compare(account_password, accountData.account_password)) {
-      delete accountData.account_password
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 })
-      if (process.env.NODE_ENV === "development") {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-      } else {
-        res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
-      }
-      return res.redirect("/account/")
-    } else {
-      req.flash("notice", "Please check your credentials and try again.")
-      res.status(501).redirect("/account/login")
-    }
-  } catch (error) {
-    req.flash("notice", "Please check your credentials and try again.")
-    res.status(501).redirect("/account/login")
-  }
+async function buildAccount(req, res, next) {
+  let nav = await utilities.getNav()
+  let accountInfo = await accountModel.getAccountById(res.locals.accountData.account_id)
+  res.render("account/account", {
+    title: "Account Management",
+    nav,
+    errors: null
+  })
 }
 
-module.exports = { buildLogin, buildRegister, buildManagement, registerAccount, accountLogin };
+
+module.exports = { buildLogin, buildRegister, buildAccount, registerAccount, accountLogin };
