@@ -34,7 +34,10 @@ async function checkExistingEmail(account_email) {
 }
 
 /* *****************************
-*   Get account by email
+* Get account by email
+* Return account data using email address
+* from video https://www.youtube.com/watch?v=vqCWUqt8heQ
+* Unit 5, Login Activity
 * *************************** */
 async function getAccountByEmail (account_email) {
   try {

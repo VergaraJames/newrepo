@@ -4,4 +4,20 @@
     <a href="/inv/add-classification">Add New Classification</a>
     <br>
     <a href="/inv/add-inventory">Add New Inventory</a>
-  </div>
+  </div><h1><%= title %></h1>
+  <%- messages() %>
+    <div class="inv-management">
+      <a href="/inv/add-classification">Add New Classification</a>
+      <br>
+      <a href="/inv/add-inventory">Add New Inventory</a>
+      <br>
+      <h2>Manage Inventory</h2>
+      <br>
+      <p>Please select a classification to manage inventory items.</p>
+      <br>
+      <%- locals.classificationList %>
+      <br>
+      <table id="inventoryDisplay"></table>
+      <noscript>JavaScript must be enabled to use this page</noscript>
+      <script src="/js/inventory.js"></script>
+    </div>

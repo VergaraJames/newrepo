@@ -13,13 +13,18 @@ const regValidate = require("../utilities/account-validation");
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 
 // Routes to build something
-router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement))
+/* Deliver Account Management view
+ * Unit 5, JWT Authorization Activity 
+ * From video https://www.youtube.com/watch?v=C2JiypeJqbQ */
+router.get("/", utilities.checkLogin, 
+  utilities.handleErrors(accountController.buildManagement))
 router.get("/login", utilities.handleErrors(accountController.buildLogin))
 router.get("/register", utilities.handleErrors(accountController.buildRegister))
 
 // Process the login attempt
 // This is how it will handle it later once the login process is built
 // utilities.handleErrors(accountController.processLogin)
+// Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
 router.post("/login",
   regValidate.loginRules(), 
   regValidate.checkLoginData, 

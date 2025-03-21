@@ -44,6 +44,11 @@ app.use(
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//unit 5, login activity
+app.use(cookieParser())
+// unit 5, Login proccess activity
+app.use(utilities.checkJWTToken)
+
 // Express Messages Middleware
 // From instructions https://blainerobertson.github.io/340-js/views/session-message.html
 app.use(require("connect-flash")())

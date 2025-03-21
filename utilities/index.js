@@ -2,7 +2,7 @@
 
 const invModel = require("../models/inventory-model")
 const Util = {}
-// const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken")
 require("dotenv").config()
 
 /* ************************
@@ -114,6 +114,8 @@ Util.buildClassificationList = async function (classification_id = null) {
 
 /* ****************************************
 * Middleware to check token validity
+* from video https://www.youtube.com/watch?v=vqCWUqt8heQ
+* Unity 5, Login Proccess
 **************************************** */
 Util.checkJWTToken = (req, res, next) => {
  if (req.cookies.jwt) {
@@ -122,11 +124,12 @@ Util.checkJWTToken = (req, res, next) => {
    process.env.ACCESS_TOKEN_SECRET,
    function (err, accountData) {
     if (err) {
-     req.flash("Please log in")
+     req.flash("notice", "Please log in")
      res.clearCookie("jwt")
      return res.redirect("/account/login")
     }
     res.locals.accountData = accountData
+    /* Flag response indicating client was "logged in" or authenticated */
     res.locals.loggedin = 1
     next()
    })
@@ -137,6 +140,8 @@ Util.checkJWTToken = (req, res, next) => {
 
 /* ****************************************
  *  Check Login
+ *  Unit 5, jwt authorize activity
+ * From guide https://byui-cse.github.io/cse340-ww-content/views/jwt-authorize.html
  * ************************************ */
 Util.checkLogin = (req, res, next) => {
   if (res.locals.loggedin) {
