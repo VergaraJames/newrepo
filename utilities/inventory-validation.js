@@ -118,6 +118,7 @@ validate.inventoryRules = () => {
 
 /* ******************************
  * Check Inventory Data and return errors or continue to addition
+ * when errors exist it returned to edit view
  * ***************************** */
 validate.checkInventoryData = async (req, res, next) => {
   const errors = validationResult(req)

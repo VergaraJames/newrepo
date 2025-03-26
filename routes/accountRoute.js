@@ -9,25 +9,31 @@ const regValidate = require("../utilities/account-validation");
  * Account routes
  * Unit 4, deliver Register view activity
  * from video https://www.youtube.com/watch?v=5H0aIxO1oC0
- * **************************************/
-// from guide https://blainerobertson.github.io/340-js/views/account-registration.html
-
-// Routes to build something
-/* Deliver Account Management view
- * Unit 5, JWT Authorization Activity 
+ * Unit 5, JWT Authorization Activity
  * From video https://www.youtube.com/watch?v=C2JiypeJqbQ */
-router.get("/", utilities.checkLogin, 
-  utilities.handleErrors(accountController.buildManagement))
-router.get("/login", utilities.handleErrors(accountController.buildLogin))
-router.get("/register", utilities.handleErrors(accountController.buildRegister))
-
+router.get(
+  "/",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildManagement)
+);
+router.get("/login", utilities.handleErrors(accountController.buildLogin));
+router.get("/logout", utilities.handleErrors(accountsController.logout));
+router.get(
+  "/register",
+  utilities.handleErrors(accountController.buildRegister)
+);
+router.get(
+  "/update/:account_id",
+  utilities.handleErrors(accountsController.buildUpdateAccount)
+);
 // Process the login attempt
 // This is how it will handle it later once the login process is built
 // utilities.handleErrors(accountController.processLogin)
 // Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
-router.post("/login",
-  regValidate.loginRules(), 
-  regValidate.checkLoginData, 
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
   utilities.handleErrors(accountController.accountLogin),
   (req, res) => {
     res.status(200).send("login process complete");
@@ -36,7 +42,8 @@ router.post("/login",
 
 // Process the registration data
 // from guide https://blainerobertson.github.io/340-js/views/server-validation.html
-router.post('/register',
+router.post(
+  "/register",
   regValidate.registrationRules(),
   regValidate.checkRegData,
   utilities.handleErrors(accountController.registerAccount),
@@ -50,9 +57,24 @@ router.post('/register',
  * Unit 4, deliver Error handling middleware
  * **************************************/
 // Error handling middleware
-router.use((err, req, res, next) => {
+/* router.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
+*/
+
+router.post(
+  "/update",
+  regValidate.accountUpdateRules(),
+  regValidate.checkUpdatedData,
+  utilities.handleErrors(accountsController.updateAccount)
+);
+
+router.post(
+  "/update-password",
+  regValidate.passwordRules(),
+  regValidate.checkUpdatedPassword,
+  utilities.handleErrors(accountsController.updateAccountPassword)
+);
 
 module.exports = router;

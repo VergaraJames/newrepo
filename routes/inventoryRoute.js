@@ -1,43 +1,108 @@
-// Needed Resources 
-const express = require("express")
-const router = new express.Router() 
-const invController = require("../controllers/invController")
-const utilities = require("../utilities/")
-const validate = require("../utilities/inventory-validation")
+// Needed Resources
+const express = require("express");
+const router = new express.Router();
+const invController = require("../controllers/invController");
+const utilities = require("../utilities/");
+const validate = require("../utilities/inventory-validation");
+const Util = require("../utilities/");
 
-router.get("/", utilities.handleErrors(invController.buildManagementView));
-router.get("/management", utilities.handleErrors(invController.buildManagementView));
+// Admin Routes
+// Unit 5, Check Account
+router.get(
+  "/",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildManagementView)
+);
+
+
 
 // Route to build inventory by classification view
-router.get('/type/:classificationId', utilities.handleErrors(invController.buildByClassificationId));
+router.get(
+  "/type/:classificationId",
+  utilities.handleErrors(invController.buildByClassificationId)
+);
+
 // New route for individual vehicle details
 // Route to bulid inventory detail - from video https://www.youtube.com/watch?v=yc6zcWe87VM&t=20s
-router.get('/detail/:id', utilities.handleErrors(invController.getVehicleDetails));
-// Add GET routes for forms
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
-router.get("/add-inventory", utilities.handleErrors(invController.buildAddInventory))
+router.get(
+  "/detail/:id",
+  utilities.handleErrors(invController.getVehicleDetails)
+);
 
-// Add a new classification
-router.post("/add-classification", 
-  validate.classificationRules(), 
-  validate.checkClassificationData, 
+router.get(
+  "/getInventory/:classification_id",
+  utilities.handleErrors(invController.getInventoryJSON)
+);
+
+
+// Add GET routes for forms
+router.get(
+  "/add-classification",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildAddClassification)
+);
+
+router.post(
+  "/add-classification",
+  Util.checkAccountType,
+  validate.classificationRules(),
+  validate.checkClassificationData,
   utilities.handleErrors(invController.addClassification)
-)
+);
 
 // Add a new inventory item
-router.post("/add-inventory", 
-  validate.inventoryRules(), 
-  validate.checkInventoryData, 
+// CRUD by id
+router.get(
+  "/add-inventory",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildAddInventory)
+);
+
+router.post(
+  "/add-inventory",
+  Util.checkAccountType,
+  validate.inventoryRules(),
+  validate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
-)
+);
+
+router.get(
+  "/edit/:id",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.editInventoryView)
+);
+
+// Route Update inventoryy item
+// from guide https://byui-cse.github.io/cse340-ww-content/views/update-two.html
+router.post(
+  "/update/",
+  Util.checkAccountType,
+  validate.updateInventoryRules(),
+  validate.checkUpdateData,
+  utilities.handleErrors(invController.updateInventory)
+);
+router.get(
+  "/delete/:id",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildDeleteConfirmView)
+);
+router.post(
+  "/delete",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.deleteInventoryItem)
+);
 
 // Error handling middleware
 router.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send("Something broke!")
-})
+  console.error(err.stack);
+  res.status(500).send("Something broke!");
+});
 
 module.exports = router;
 
-// Build management view
-// router.get("/management", utilities.handleErrors(invController.buildManagementView))
+/* Build management view
+router.get(
+  "/management",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildManagementView)
+);*/
