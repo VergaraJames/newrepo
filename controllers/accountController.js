@@ -22,67 +22,49 @@ async function buildLogin(req, res, next) {
 }
 
 /* ****************************************
- *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
- *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
- * *****************************************
- *  Process Login
- * Updated with unit 5, Login process
- * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
- * *************************************** */
-async function accountLogin(req, res) {
-  let nav = await utilities.getNav();
-  const { account_email, account_password } = req.body;
-  const accountData = await accountModel.getAccountByEmail(account_email);
-  if (!accountData) {
-    req.flash("notice", "Please check your credentials and try again.");
-    res.status(400).render("account/login", {
-      title: "Login",
-      nav,
-      errors: null,
-      account_email,
-    });
-    return;
-  }
-  try {
-    if (await bcrypt.compare(account_password, accountData.account_password)) {
-      delete accountData.account_password;
-      const accessToken = jwt.sign(
-        accountData,
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: 3600 }
-      );
-      if (process.env.NODE_ENV === "development") {
-        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-      } else {
-        res.cookie("jwt", accessToken, {
-          httpOnly: true,
-          secure: true,
-          maxAge: 3600 * 1000,
-        });
-      }
-      return res.redirect("/account/");
-    } else {
-      req.flash("notice", "Please check your credentials and try again.");
-      res.status(501).redirect("/account/login");
-    }
-  } catch (error) {
-    req.flash("notice", "Please check your credentials and try again.");
-    res.status(501).redirect("/account/login");
-  }
-}
-
-/* ****************************************
  *  Deliver registration view
  * ***************************************
  * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * from guide https://blainerobertson.github.io/340-js/views/account-registration.html
  * and https://blainerobertson.github.io/340-js/views/server-validation.html */
-async function buildRegister(req, res, next) {
+ async function buildRegister(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/register", {
     title: "Register",
     nav,
     errors: null,
+  });
+}
+
+/* ****************************************
+ *  Deliver management view
+ * *************************************** */
+async function buildManagement(req, res, next) {
+  let nav = await utilities.getNav();
+  let accountInfo = await accountModel.getAccountById(
+    res.locals.accountData.account_id
+  );
+  res.render("account/account", {
+    title: "Account Management",
+    nav,
+    errors: null,
+  });
+}
+
+/* ****************************************
+ *  Build Update Account View - step 3 of task 5
+ * ************************************ */
+async function buildUpdateAccountView(req, res) {
+  let nav = await utilities.getNav();
+  const accountData = res.locals.accountData; // From checkJWTToken
+  res.render("account/update-account", {
+    title: "Update Account",
+    nav,
+    account_firstname: accountData.account_firstname,
+    account_lastname: accountData.account_lastname,
+    account_email: accountData.account_email,
+    account_id: accountData.account_id,
+    errors: null
   });
 }
 
@@ -145,108 +127,129 @@ async function registerAccount(req, res) {
 }
 
 /* ****************************************
- *  Deliver management view
+ *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+ *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
+ * *****************************************
+ *  Process Login
+ * Updated with unit 5, Login process
+ * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  * *************************************** */
-async function buildManagement(req, res, next) {
+async function accountLogin(req, res) {
   let nav = await utilities.getNav();
-  let accountInfo = await accountModel.getAccountById(
-    res.locals.accountData.account_id
-  );
-  res.render("account/account", {
-    title: "Account Management",
-    nav,
-    errors: null,
-  });
+  const { account_email, account_password } = req.body;
+  const accountData = await accountModel.getAccountByEmail(account_email);
+  if (!accountData) {
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    });
+    return;
+  }
+  try {
+    if (await bcrypt.compare(account_password, accountData.account_password)) {
+      delete accountData.account_password;
+      const accessToken = jwt.sign(
+        accountData,
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 }
+      );
+      if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } else {
+        res.cookie("jwt", accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 3600 * 1000,
+        });
+      }
+      return res.redirect("/account/");
+    } else {
+      req.flash("notice", "Please check your credentials and try again.");
+      res.status(501).redirect("/account/login", {
+      title: "Login",
+        nav,
+        errors: null,
+        account_email,
+      });
+    }
+  } catch (error) {
+    req.flash("notice", "Please check your credentials and try again.");
+    res.status(501).redirect("/account/login");
+  }
 }
 
 /* ****************************************
  * Updated with unit 5, Login process
  * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  * *************************************** */
-async function buildUpdateAccount(req, res, next) {
+/* ****************************************
+ *  Update Account Information - for user name and email
+ * ************************************ */
+async function updateAccount(req, res) {
   let nav = await utilities.getNav();
-  const { account_id } = req.params;
-  const accountResult = await actModel.getAccountById(account_id);
-  if (res.locals.loggedin) {
-    if (accountResult) {
-      res.status(201).render("account/update-account", {
-        title: "Edit Account",
-        nav,
-        errors: null,
-        accountData: accountResult,
-      });
+  const { account_firstname, account_lastname, account_email, account_id } = req.body;
+  const updateResult = await accountModel.updateAccount(account_id, account_firstname, account_lastname, account_email);
+  if (updateResult) {
+    const updatedAccount = await accountModel.getAccountById(account_id);
+    delete updatedAccount.account_password;
+    const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+    if (process.env.NODE_ENV === "development") {
+      res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
     } else {
-      req.flash("notice", "We could not find the requested account.");
-      res.status(501).redirect(`/account`);
+      res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
     }
+    req.flash("notice", "Account updated successfully");
+    res.redirect("/account/"); // delivers management view
   } else {
-    req.flash("notice", "Please login");
-    res.status(501).redirect("/account/login");
+    req.flash("notice", "Account update failed");
+    res.status(501).render("account/update-account", {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_id
+    });
   }
 }
+
 /* ****************************************
+ * Change Password - for password
  * Updated with unit 5, Login process
  * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  * *************************************** */
-async function updateAccount(req, res, next) {
-  const { account_firstname, account_lastname, account_email, account_id } =
-    req.body;
-  const accountResult = await actModel.updateAccount(
-    account_firstname,
-    account_lastname,
-    account_email,
-    account_id
-  );
-  if (res.locals.loggedin) {
-    if (accountResult) {
-      delete accountResult.account_email;
-      utilities.updateJWTAccountInfo(accountResult, req, res, next);
-      req.flash("notice", "Account has been updated successfully!");
-      res.status(201).redirect("/account");
-    } else {
-      req.flash("notice", "There was an error updating the account");
-      res.status(501).redirect(`/account/update/${account_id}`);
-    }
-  } else {
-    req.flash("notice", "Please login");
-    res.redirect("/account/login");
-  }
-}
-/* ****************************************
- * Updated with unit 5, Login process
- * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
- * *************************************** */
-async function updateAccountPassword(req, res, next) {
+async function changePassword(req, res) {
+  let nav = await utilities.getNav();
   const { account_password, account_id } = req.body;
-  let hashedPassword;
-  try {
-    hashedPassword = bcrypt.hashSync(account_password, 10);
-  } catch (error) {
-    console.error("There was an error");
-    console.log(error);
-  }
-  const updatePasswordResult = await actModel.updatePassword(
-    hashedPassword,
-    account_id
-  );
-  if (res.locals.loggedin) {
-    if (updatePasswordResult) {
-      req.flash("notice", "Password has been updated successfully!");
+  const hashedPassword = await bcrypt.hash(account_password, 10);
+  const updateResult = await accountModel.updatePassword(account_id, hashedPassword);
+  if (updateResult) {
+    req.flash("notice", "Password has been updated successfully!");
       res.status(201).redirect("/account");
-    } else {
-      req.flash("notice", "There was an error updating the password");
-      res.status(501).redirect(`/account/update/${account_id}`);
-    }
   } else {
-    req.flash("notice", "Please login");
-    req.redirect("/account/login");
+    const accountData = await accountModel.getAccountById(account_id);
+    req.flash("notice", "There was an error updating the password");
+      res.status(501).redirect(`/account/update/${account_id}`, {
+      title: "Update Account",
+      nav,
+      errors: null,
+      account_firstname: accountData.account_firstname,
+      account_lastname: accountData.account_lastname,
+      account_email: accountData.account_email,
+      account_id
+    });
   }
 }
+
 /* ****************************************
  * Updated with unit 5, Login process
  * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  * *************************************** */
-async function logout(req, res, next) {
+async function accountLogout(req, res, next) {
   if (req.cookies.jwt) {
     req.session.destroy((err) => {
       if (err) {
@@ -255,6 +258,7 @@ async function logout(req, res, next) {
         res.clearCookie("jwt");
         res.clearCookie("sessionId");
         res.locals;
+        req.flash("notice", "You have been logged out.");
         res.status(201).redirect("/");
       }
     });
@@ -264,11 +268,11 @@ async function logout(req, res, next) {
 module.exports = {
   buildLogin,
   buildRegister,
-  registerAccount,
   buildManagement,
+  registerAccount,
   accountLogin,
-  buildUpdateAccount,
+  accountLogout,
+  buildUpdateAccountView,
   updateAccount,
-  updateAccountPassword,
-  logout,
+  changePassword
 };

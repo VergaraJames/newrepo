@@ -1,50 +1,68 @@
 <!-- The Register page -->
 <% if (title) { %>
-  <h1> <%= title %></h1>
-<% } else {
-  res.redirect('/')
-} %>
-
-<%- messages() %>
-
-<% if (errors) { %>
-  <ul class="notice">
- <% errors.array().forEach(error => { %>
+<h1><%= title %></h1>
+<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
   <li><%= error.msg %></li>
-<%  }) %>
- </ul>
+  <% }) %>
+</ul>
 <% } %>
 
 <div class="register">
-        <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
-        <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
-        <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
-        <form action="/account/register" method="post">
-          <p> All fields are requiered.</p>
+  <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
+  <!-- from video https://www.youtube.com/watch?v=rn5RyFnl2wA -->
+  <!-- From Guide https://blainerobertson.github.io/340-js/views/clientside-validation.html -->
+  <form action="/account/register" method="post">
+    <p>All fields are requiered.</p>
 
-          <label for="account_firstname">First Name:</label>
-          <input type="text" name="account_firstname" id="account_firstname" required
-            placeholder="Enter your First Name" value="<%= locals.account_firstname %>">
+    <label for="account_firstname">First Name:</label>
+    <input
+      type="text"
+      name="account_firstname"
+      id="account_firstname"
+      required
+      placeholder="Enter your First Name"
+      value="<%= locals.account_firstname %>"
+    />
 
-          <label for="account_lastname">Last Name:</label>
-          <input type="text" name="account_lastname" id="account_lastname" required placeholder="Enter your Last Name"
-            value="<%= locals.account_lastname %>">
+    <label for="account_lastname">Last Name:</label>
+    <input
+      type="text"
+      name="account_lastname"
+      id="account_lastname"
+      required
+      placeholder="Enter your Last Name"
+      value="<%= locals.account_lastname %>"
+    />
 
-          <label for="account_email">Email:</label>
-          <input type="email" name="account_email" id="account_email" required placeholder="Enter a valid email account"
-            value="<%= locals.account_email %>">
+    <label for="account_email">Email:</label>
+    <input
+      type="email"
+      name="account_email"
+      id="account_email"
+      required
+      placeholder="Enter a valid email account"
+      value="<%= locals.account_email %>"
+    />
 
-          <!-- From video https://www.youtube.com/watch?v=hlIb4fXCFjA -->
-          <div class="password-requirements">
-            <p>Password must be at least 8 characters and contain:</p>
-            <ul>
-              <li>1 number + 1 capital letter + 1 special character</li>
-            </ul>
-          </div>
-          <label for="account_password">Password:</label>
-          <input type="password" id="account_password" name="account_password" required
-            pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,}$" placeholder="Enter your password">
-          <!-- <div id="pswdBtn">Show Password</div> -->
-          <input type="submit" value="SIGN UP">
-        </form>
+    <!-- From video https://www.youtube.com/watch?v=hlIb4fXCFjA -->
+    <div class="password-requirements">
+      <p>Password must be at least 12 characters and contain:</p>
+      <ul>
+        <li>1 number + 1 capital letter + 1 special character</li>
+      </ul>
+    </div>
+    <label for="account_password">Password:</label>
+    <input
+      type="password"
+      id="account_password"
+      name="account_password"
+      required
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+      placeholder="Enter your password"
+    />
+    <!-- <div id="pswdBtn">Show Password</div> -->
+    <input type="submit" value="SIGN UP" />
+  </form>
 </div>

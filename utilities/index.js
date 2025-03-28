@@ -1,9 +1,13 @@
 // This utility file contains helper functions for various tasks like navigation building and HTML formatting.
 
-const invModel = require("../models/inventory-model")
-const Util = {}
-const jwt = require("jsonwebtoken")
-require("dotenv").config()
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const invModel = require("../models/inventory-model");
+const Util = {};
+
+/***************************************
+ * Construct the nav HTML unordered list
+ **************************************/
 
 /* ************************
  * Constructs the nav HTML unordered list
@@ -151,5 +155,55 @@ Util.checkLogin = (req, res, next) => {
     return res.redirect("/account/login")
   }
  }
+
+/* ****************************************
+ * Middleware to check account type
+ **************************************** */
+Util.checkAccountType = (req, res, next) => {
+  console.log("Logged in:", res.locals.loggedin);
+  if (res.locals.loggedin) {
+    const accountType = res.locals.accountData.account_type;
+    console.log("Account Type:", accountType);
+    if (accountType === "Admin" || accountType === "Employee") {
+      next();
+    } else {
+      req.flash("notice", "Restricted to Employees and Admin only");
+      res.redirect("/account/login");
+    }
+  } else {
+    req.flash("notice", "Please log in to access this page");
+    res.redirect("/account/login");
+  }
+};
+
+
+ //Check if the user tye is allowed to access the routes
+Util.checkAccessRights = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const { account_type } = jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
+    if (["Employee", "Admin"].includes(account_type)) {
+      next()
+    }
+  } else {
+    req.flash("notice", "Access forbidden")
+    res.redirect("/account/login")
+  }
+}
+
+Util.updateJWTAccountInfo = async (data, req, res, next) => {
+  if (req.cookies.jwt) {
+    let jwtoken = req.cookies.jwt
+    const { exp } = jwt.verify(jwtoken, process.env.ACCESS_TOKEN_SECRET)
+    const newExp = (new Date(exp * 1000).getTime() - new Date().getTime()) / 1000
+    const newAccessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: Math.round(newExp) })
+    if (process.env.NODE_ENV === "development") {
+      res.cookie("jwt", newAccessToken, { httpOnly: true, maxAge: 3600 * 1000 })
+    } else {
+      res.cookie("jwt", newAccessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
+    }
+    return
+  }
+}
+
 
 module.exports = Util

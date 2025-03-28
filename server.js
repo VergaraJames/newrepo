@@ -68,16 +68,14 @@ app.set("layout", "./layouts/layout"); // not at views root
  * Routes
  *************************/
 app.use(static);
+// Index route - Unit 3, activity
+app.get("/", utilities.handleErrors(baseController.buildHome));
 // Inventory routes - Unit 3, activity
 app.use("/inv", require("./routes/inventoryRoute"));
 // Account routes - Unit 4, Activity
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 app.use("/account", require("./routes/accountRoute"));
-
-
-// Index route - Unit 3, activity
-app.get("/", utilities.handleErrors(baseController.buildHome));
-
+app.use("/watchlist", require("./routes/watchListRoute"))
 // Server crash
 app.get("/trigger-500-error", (req, res, next) => {
   const undefinedValue = undefined;

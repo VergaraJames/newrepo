@@ -46,7 +46,7 @@ validate.registrationRules = () => {
       .trim()
       .notEmpty()
       .isStrongPassword({
-        minLength: 8,
+        minLength: 12,
         minLowercase: 1,
         minUppercase: 1,
         minNumbers: 1,
@@ -69,7 +69,7 @@ validate.checkRegData = async (req, res, next) => {
     let nav = await utilities.getNav()
     res.render("account/register", {
       errors,
-      title: "Registration",
+      title: "Register",
       nav,
       account_firstname,
       account_lastname,
@@ -119,22 +119,83 @@ validate.checkLoginData = async (req, res, next) => {
   }
   next()
 }
-/* ******************************
- * Check password rules and return errors or continue to login
- * ***************************** */
-validate.passwordRules = () => {
-  return [body("account_password")
-    .trim()
-    .notEmpty()
-    .isStrongPassword({
-      minLength: 12,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 1
-    })
-    .withMessage("Password does not meet requirements.")]
-}
 
+/* ******************************
+ * Update account and Change password Validation
+ * ***************************** */
+validate.updateAccountRules = () => {
+  return [
+    body("account_firstname")
+      .trim()
+      .isLength({ min: 1 })
+      .matches(/^[A-Za-z -]+$/)
+      .withMessage("First name must contain only letters, spaces, or hyphens"),
+    body("account_lastname")
+      .trim()
+      .isLength({ min: 1 })
+      .matches(/^[A-Za-z -]+$/)
+      .withMessage("Last name must contain only letters, spaces, or hyphens"),
+    body("account_email").trim().isEmail().withMessage("Valid email required"),
+    body("account_id").isInt().withMessage("Invalid account ID"),
+  ];
+};
+
+validate.changePasswordRules = () => {
+  return [
+    body("account_password")
+      .trim()
+      .isLength({ min: 12 })
+      .matches(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$/
+      )
+      .withMessage(
+        "Password must be 12 + characters with 1 number, 1 capital, 1 special character"
+      ),
+    body("account_password_confirm")
+      .trim()
+      .custom((value, { req }) => value === req.body.account_password)
+      .withMessage("Passwords must match"),
+    body("account_id").isInt().withMessage("Invalid account ID"),
+  ];
+};
+
+/* ******************************
+ * Validation Handler
+ * ***************************** */
+validate.checkUpdateData = async (req, res, next) => {
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body;
+  let nav = await utilities.getNav();
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("account/update-account", {
+      title: "Update Account",
+      nav,
+      errors,
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_id,
+    });
+  }
+  next();
+};
+
+validate.checkPasswordData = async (req, res, next) => {
+  const { account_password, account_password_confirm, account_id } = req.body;
+  let nav = await utilities.getNav();
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.render("account/update-account", {
+      title: "Update Account",
+      nav,
+      errors,
+      account_password: "",
+      account_password_confirm: "",
+      account_id,
+    });
+  }
+  next();
+};
 
 module.exports = validate

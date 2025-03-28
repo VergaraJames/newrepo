@@ -1,42 +1,115 @@
+<% if (title) { %>
 <h1><%= title %></h1>
-<%- messages() %>
-<% if (locals.errors && locals.errors.length > 0) { %>
-  <ul class="notice">
-    <% locals.errors.forEach(error => { %>
-      <li><%= error.msg %></li>
-    <% }) %>
-  </ul>
+<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
 <% } %>
+
 <form action="/inv/add-inventory" method="POST">
   <p><em>Note: All fields are required.</em></p>
-  <br>
+  <br />
   <label for="inv_make">Make:</label>
-  <input type="text" id="inv_make" name="inv_make" required placeholder="e.g., Toyota" value="<%= locals.inv_make %>" title="Please provide the make of the vehicle.">
-  
+  <input
+    type="text"
+    id="inv_make"
+    name="inv_make"
+    required
+    placeholder="e.g., Toyota"
+    value="<%= locals.inv_make %>"
+    title="Please provide the make of the vehicle."
+  />
+
   <label for="inv_model">Model:</label>
-  <input type="text" id="inv_model" name="inv_model" required placeholder="e.g., Camry" value="<%= locals.inv_model %>" title="Please provide the model of the vehicle.">
-  
+  <input
+    type="text"
+    id="inv_model"
+    name="inv_model"
+    required
+    placeholder="e.g., Camry"
+    value="<%= locals.inv_model %>"
+    title="Please provide the model of the vehicle."
+  />
+
   <label for="inv_year">Year:</label>
-  <input type="number" id="inv_year" name="inv_year" required placeholder="e.g., 2010" min="1900" max="<%= new Date().getFullYear() + 1 %>" value="<%= locals.inv_year %>" title="Year must be between 1900 and next year.">
-  
+  <input
+    type="number"
+    id="inv_year"
+    name="inv_year"
+    required
+    placeholder="e.g., 2010"
+    min="1900"
+    max="<%= new Date().getFullYear() + 1 %>"
+    value="<%= locals.inv_year %>"
+    title="Year must be between 1900 and next year."
+  />
+
   <label for="inv_color">Color:</label>
-  <input type="text" id="inv_color" name="inv_color" required placeholder="e.g., Red" value="<%= locals.inv_color %>" title="Please provide the color of the vehicle.">
-  
+  <input
+    type="text"
+    id="inv_color"
+    name="inv_color"
+    required
+    placeholder="e.g., Red"
+    value="<%= locals.inv_color %>"
+    title="Please provide the color of the vehicle."
+  />
+
   <label for="inv_description">Description:</label>
-  <textarea id="inv_description" name="inv_description" required placeholder="e.g., Low mileage, excellent condition"><%= locals.inv_description %></textarea>
-  
-  <input type="text" id="inv_image" name="inv_image" required value="<%- locals.inv_image || '/images/vehicles/no-image.png' %>" title="Provide the path to the vehicle's image (e.g., /images/vehicles/car.png).">
-  
-  <input type="text" id="inv_thumbnail" name="inv_thumbnail" required value="<%- locals.inv_thumbnail || '/images/vehicles/no-image-tn.png' %>" title="Provide the path to the vehicle's thumbnail image (e.g., /images/vehicles/car-tn.png).">
-  
+  <textarea
+    id="inv_description"
+    name="inv_description"
+    required
+    placeholder="e.g., Low mileage, excellent condition"
+  >
+<%= locals.inv_description %></textarea
+  >
+
+  <input
+    type="text"
+    id="inv_image"
+    name="inv_image"
+    required
+    value="<%- locals.inv_image || '/images/vehicles/no-image.png' %>"
+    title="Provide the path to the vehicle's image (e.g., /images/vehicles/car.png)."
+  />
+
+  <input
+    type="text"
+    id="inv_thumbnail"
+    name="inv_thumbnail"
+    required
+    value="<%- locals.inv_thumbnail || '/images/vehicles/no-image-tn.png' %>"
+    title="Provide the path to the vehicle's thumbnail image (e.g., /images/vehicles/car-tn.png)."
+  />
+
   <label for="inv_price">Price:</label>
-  <input type="number" id="inv_price" name="inv_price" required placeholder="e.g., 25000.00" step="0.01" value="<%= locals.inv_price %>" title="Price must be a positive number.">
-  
+  <input
+    type="number"
+    id="inv_price"
+    name="inv_price"
+    required
+    placeholder="e.g., 25000.00"
+    step="0.01"
+    value="<%= locals.inv_price %>"
+    title="Price must be a positive number."
+  />
+
   <label for="inv_miles">Miles:</label>
-  <input type="number" id="inv_miles" name="inv_miles" required placeholder="e.g., 15000" value="<%= locals.inv_miles %>" title="Mileage must be a non-negative integer.">
-  
+  <input
+    type="number"
+    id="inv_miles"
+    name="inv_miles"
+    required
+    placeholder="e.g., 15000"
+    value="<%= locals.inv_miles %>"
+    title="Mileage must be a non-negative integer."
+  />
+
   <label for="classificationList">Classification:</label>
   <%- locals.classificationList %>
-  
+
   <button type="submit">Add Inventory Item</button>
 </form>

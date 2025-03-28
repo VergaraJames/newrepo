@@ -1,0 +1,85 @@
+<% if (title) { %>
+<h1><%= title %></h1>
+<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
+<ul class="notice">
+  <% errors.array().forEach(error=> { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
+
+<form action="/account/update" method="post" id="updateAccountForm">
+  <label for="account_firstname">
+    First name
+    <input
+      required
+      type="text"
+      name="account_firstname"
+      id="fName"
+      value="<%- accountData.account_firstname %>"
+    />
+  </label>
+  <label for="account_lastname">
+    Last name
+    <input
+      required
+      type="text"
+      name="account_lastname"
+      id="lName"
+      value="<%- accountData.account_lastname %>"
+    />
+  </label>
+  <label for="account_email">
+    Email address
+    <input
+      required
+      type="email"
+      name="account_email"
+      id="email"
+      value="<%- accountData.account_email %>"
+    />
+  </label>
+  <input
+    type="hidden"
+    name="account_id"
+    value="<%- accountData.account_id %>"
+  />
+  <input
+    disabled
+    type="submit"
+    id="updateAccountButton"
+    value="Update information"
+  />
+</form>
+
+<h2>Update password</h2>
+<form id="changePasswordForm" action="/account/update-password" method="post">
+  <label for="account_password">
+    Password
+    <input
+      required
+      type="password"
+      name="account_password"
+      id="password"
+      pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+    />
+  </label>
+  <p>
+    Passwords must be minimum of 12 characters and include 1 capital letter, 1
+    number and 1 special character.
+    <input type="button" value="Show Password" id="showPassword" />
+  </p>
+  <input
+    type="hidden"
+    name="account_id"
+    value="<%- accountData.account_id %>"
+  />
+  <input
+    disabled
+    type="submit"
+    id="changePasswordButton"
+    value="Change password"
+  />
+  <script src="/js/script.js"></script>
+</form>
+<script src="/js/act-update.js"></script>

@@ -45,4 +45,4 @@ watchlistModel.removeFromList = async (watchlist_id) => {
   }
 };
 
-module.exports = watchlistMode;
+module.exports = watchlistModel;

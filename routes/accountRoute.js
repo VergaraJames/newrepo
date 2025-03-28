@@ -16,28 +16,43 @@ router.get(
   utilities.checkLogin,
   utilities.handleErrors(accountController.buildManagement)
 );
+// Route to deliver login view
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
-router.get("/logout", utilities.handleErrors(accountsController.logout));
+// Route to deliver logout view
+router.get("/logout", utilities.handleErrors(accountController.accountLogout));
+// Route to deliver register view
 router.get(
   "/register",
   utilities.handleErrors(accountController.buildRegister)
 );
+
+/* ***************************************
+ * Account routes
+ * Unit 5, Update and Update password
+ * **************************************/
+// Task 5: Deliver update view
 router.get(
-  "/update/:account_id",
-  utilities.handleErrors(accountsController.buildUpdateAccount)
+  "/update",
+  utilities.checkJWTToken,
+  utilities.handleErrors(accountController.buildUpdateAccountView)
 );
-// Process the login attempt
-// This is how it will handle it later once the login process is built
-// utilities.handleErrors(accountController.processLogin)
-// Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
+
+// Task 5: Process update account and change password
+// Task 5: Process update account and change password
 router.post(
-  "/login",
-  regValidate.loginRules(),
-  regValidate.checkLoginData,
-  utilities.handleErrors(accountController.accountLogin),
-  (req, res) => {
-    res.status(200).send("login process complete");
-  }
+  "/update",
+  utilities.checkJWTToken,
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+);
+
+router.post(
+  "/change-password",
+  utilities.checkJWTToken,
+  regValidate.changePasswordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.changePassword)
 );
 
 // Process the registration data
@@ -52,29 +67,29 @@ router.post(
   }
 );
 
-/* ***************************************
- * Account routes
- * Unit 4, deliver Error handling middleware
- * **************************************/
+// Process the login attempt
+// This is how it will handle it later once the login process is built
+// utilities.handleErrors(accountController.processLogin)
+// Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin),
+  (req, res) => {
+    res.status(200).send("login process complete");
+  }
+);
+
 // Error handling middleware
-/* router.use((err, req, res, next) => {
+router.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });
-*/
 
-router.post(
-  "/update",
-  regValidate.accountUpdateRules(),
-  regValidate.checkUpdatedData,
-  utilities.handleErrors(accountsController.updateAccount)
-);
-
-router.post(
-  "/update-password",
-  regValidate.passwordRules(),
-  regValidate.checkUpdatedPassword,
-  utilities.handleErrors(accountsController.updateAccountPassword)
+router.get(
+  "/update/:account_id",
+  utilities.handleErrors(accountController.buildUpdateAccount)
 );
 
 module.exports = router;

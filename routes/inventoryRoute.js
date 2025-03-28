@@ -1,20 +1,14 @@
 // Needed Resources
 const express = require("express");
 const router = new express.Router();
-const invController = require("../controllers/invController");
 const utilities = require("../utilities/");
+const invController = require("../controllers/invController");
 const validate = require("../utilities/inventory-validation");
 const Util = require("../utilities/");
 
 // Admin Routes
 // Unit 5, Check Account
-router.get(
-  "/",
-  Util.checkAccountType,
-  utilities.handleErrors(invController.buildManagementView)
-);
-
-
+// GET
 
 // Route to build inventory by classification view
 router.get(
@@ -34,6 +28,11 @@ router.get(
   utilities.handleErrors(invController.getInventoryJSON)
 );
 
+router.get(
+  "/",
+  Util.checkAccountType,
+  utilities.handleErrors(invController.buildManagementView)
+);
 
 // Add GET routes for forms
 router.get(
@@ -41,7 +40,6 @@ router.get(
   Util.checkAccountType,
   utilities.handleErrors(invController.buildAddClassification)
 );
-
 router.post(
   "/add-classification",
   Util.checkAccountType,
@@ -51,13 +49,12 @@ router.post(
 );
 
 // Add a new inventory item
-// CRUD by id
+
 router.get(
   "/add-inventory",
   Util.checkAccountType,
   utilities.handleErrors(invController.buildAddInventory)
 );
-
 router.post(
   "/add-inventory",
   Util.checkAccountType,
@@ -65,6 +62,8 @@ router.post(
   validate.checkInventoryData,
   utilities.handleErrors(invController.addInventory)
 );
+
+// CRUD by id
 
 router.get(
   "/edit/:id",
@@ -99,10 +98,3 @@ router.use((err, req, res, next) => {
 });
 
 module.exports = router;
-
-/* Build management view
-router.get(
-  "/management",
-  Util.checkAccountType,
-  utilities.handleErrors(invController.buildManagementView)
-);*/
