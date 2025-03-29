@@ -28,7 +28,7 @@ router.get("/edit/:id", Util.checkAccountType, utilities.handleErrors(invControl
 // from guide https://byui-cse.github.io/cse340-ww-content/views/update-two.html
 router.post("/update/", Util.checkAccountType, validate.updateInventoryRules(), validate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
 router.get("/delete/:id", Util.checkAccountType, utilities.handleErrors(invController.buildDeleteConfirmView));
-router.post("/delete", Util.checkAccountType, utilities.handleErrors(invController.deleteInventoryItem));
+router.post("/delete/", Util.checkAccountType, utilities.handleErrors(invController.deleteInventoryItem));
 
 // Error handling middleware
 router.use((err, req, res, next) => {
