@@ -10,7 +10,7 @@ baseController.buildHome = async function (req, res) {
   // Flash message example for testing css
   // req.flash("notice", "This is a flash message.")
   // (From video https://www.youtube.com/watch?v=bJG6d7rRusU)
-  res.render("index", { title: "Home", nav, errors: null });
+  res.render("index", { title: "Home", nav });
 };
 
 module.exports = baseController;

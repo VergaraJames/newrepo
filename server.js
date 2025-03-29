@@ -75,7 +75,6 @@ app.use("/inv", require("./routes/inventoryRoute"));
 // Account routes - Unit 4, Activity
 // from guide https://blainerobertson.github.io/340-js/views/account-registration.html
 app.use("/account", require("./routes/accountRoute"));
-app.use("/watchlist", require("./routes/watchListRoute"))
 // Server crash
 app.get("/trigger-500-error", (req, res, next) => {
   const undefinedValue = undefined;

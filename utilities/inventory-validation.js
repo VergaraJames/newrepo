@@ -222,10 +222,10 @@ validate.updateInventoryRules = () => {
 /* ******************************
  * Errors directed back to the edit view
  * ***************************** */
-validate.checkUpdateData = async function (req, res, next) {
-  const {
-    classification_id,
-    inv_make,
+validate.checkUpdateData = async (req, res, next) => {
+  const { 
+    inv_id, 
+    inv_make, 
     inv_model,
     inv_description,
     inv_image,
@@ -234,22 +234,19 @@ validate.checkUpdateData = async function (req, res, next) {
     inv_year,
     inv_miles,
     inv_color,
-    inv_id,
-  } = req.body;
-  let classifications = await utilities.buildClassificationList(
-    classification_id
-  );
-  let errors = [];
-  const itemName = `${inv_make} ${inv_model}`;
-  errors = validationResult(req);
+    classification_id 
+  } = req.body
+  const errors = validationResult(req) 
   if (!errors.isEmpty()) {
-    let nav = await utilities.getNav();
-    res.render("./inventory/edit-inventory", {
-      classifications,
-      errors,
+    let nav = await utilities.getNav()
+    const classificationList = await utilities.buildClassificationList(classification_id)
+    const itemName = `${inv_make} ${inv_model}`
+    return res.render("inventory/edit-vehicle", { 
       title: "Edit " + itemName,
-      classification_id,
       nav,
+      classificationList, 
+      errors: errors.array(), 
+      inv_id,
       inv_make,
       inv_model,
       inv_description,
@@ -259,11 +256,10 @@ validate.checkUpdateData = async function (req, res, next) {
       inv_year,
       inv_miles,
       inv_color,
-      inv_id,
-    });
-    return;
+      classification_id
+    })
   }
-  next();
-};
+  next()
+}
 
 module.exports = validate;

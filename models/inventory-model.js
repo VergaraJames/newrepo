@@ -54,7 +54,7 @@ async function addClassification(classification_name) {
     return data.rows[0];
   } catch (error) {
     console.error("Add Classification error " + error);
-    return error.message;
+    return null;
   }
 }
 

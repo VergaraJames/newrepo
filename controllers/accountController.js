@@ -27,7 +27,7 @@ async function buildLogin(req, res, next) {
  * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * from guide https://blainerobertson.github.io/340-js/views/account-registration.html
  * and https://blainerobertson.github.io/340-js/views/server-validation.html */
- async function buildRegister(req, res, next) {
+async function buildRegister(req, res, next) {
   let nav = await utilities.getNav();
   res.render("account/register", {
     title: "Register",
@@ -64,7 +64,7 @@ async function buildUpdateAccountView(req, res) {
     account_lastname: accountData.account_lastname,
     account_email: accountData.account_email,
     account_id: accountData.account_id,
-    errors: null
+    errors: null,
   });
 }
 
@@ -109,7 +109,7 @@ async function registerAccount(req, res) {
   if (regResult) {
     req.flash(
       "notice",
-      `Congratulations, you\'re registered ${account_firstname}. Please log in.`
+      `Congratulations, you're registered ${account_firstname}. Please log in.`
     );
     res.status(201).render("account/login", {
       title: "Login",
@@ -154,7 +154,7 @@ async function accountLogin(req, res) {
       const accessToken = jwt.sign(
         accountData,
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: 3600 }
+        { expiresIn: 3600 * 1000 }
       );
       if (process.env.NODE_ENV === "development") {
         res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
@@ -168,16 +168,15 @@ async function accountLogin(req, res) {
       return res.redirect("/account/");
     } else {
       req.flash("notice", "Please check your credentials and try again.");
-      res.status(501).redirect("/account/login", {
-      title: "Login",
+      res.status(400).redirect("/account/login", {
+        title: "Login",
         nav,
         errors: null,
         account_email,
       });
     }
   } catch (error) {
-    req.flash("notice", "Please check your credentials and try again.");
-    res.status(501).redirect("/account/login");
+    throw new Error("Access Forbidden");
   }
 }
 
@@ -190,19 +189,33 @@ async function accountLogin(req, res) {
  * ************************************ */
 async function updateAccount(req, res) {
   let nav = await utilities.getNav();
-  const { account_firstname, account_lastname, account_email, account_id } = req.body;
-  const updateResult = await accountModel.updateAccount(account_id, account_firstname, account_lastname, account_email);
+  const { account_firstname, account_lastname, account_email, account_id } =
+    req.body;
+  const updateResult = await accountModel.updateAccount(
+    account_id,
+    account_firstname,
+    account_lastname,
+    account_email
+  );
   if (updateResult) {
     const updatedAccount = await accountModel.getAccountById(account_id);
     delete updatedAccount.account_password;
-    const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
+    const accessToken = jwt.sign(
+      updatedAccount,
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: 3600 * 1000 }
+    );
     if (process.env.NODE_ENV === "development") {
       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
     } else {
-      res.cookie("jwt", accessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 });
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600 * 1000,
+      });
     }
     req.flash("notice", "Account updated successfully");
-    res.redirect("/account/"); // delivers management view
+    res.redirect("/account/");
   } else {
     req.flash("notice", "Account update failed");
     res.status(501).render("account/update-account", {
@@ -212,7 +225,7 @@ async function updateAccount(req, res) {
       account_firstname,
       account_lastname,
       account_email,
-      account_id
+      account_id,
     });
   }
 }
@@ -226,21 +239,24 @@ async function changePassword(req, res) {
   let nav = await utilities.getNav();
   const { account_password, account_id } = req.body;
   const hashedPassword = await bcrypt.hash(account_password, 10);
-  const updateResult = await accountModel.updatePassword(account_id, hashedPassword);
+  const updateResult = await accountModel.updatePassword(
+    account_id,
+    hashedPassword
+  );
   if (updateResult) {
     req.flash("notice", "Password has been updated successfully!");
-      res.status(201).redirect("/account");
+    res.redirect("/account/");
   } else {
     const accountData = await accountModel.getAccountById(account_id);
     req.flash("notice", "There was an error updating the password");
-      res.status(501).redirect(`/account/update/${account_id}`, {
+    res.status(501).redirect(`/account/update/${account_id}`, {
       title: "Update Account",
       nav,
       errors: null,
       account_firstname: accountData.account_firstname,
       account_lastname: accountData.account_lastname,
       account_email: accountData.account_email,
-      account_id
+      account_id,
     });
   }
 }
@@ -250,19 +266,9 @@ async function changePassword(req, res) {
  * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  * *************************************** */
 async function accountLogout(req, res, next) {
-  if (req.cookies.jwt) {
-    req.session.destroy((err) => {
-      if (err) {
-        res.status(400).redirect("/account");
-      } else {
-        res.clearCookie("jwt");
-        res.clearCookie("sessionId");
-        res.locals;
-        req.flash("notice", "You have been logged out.");
-        res.status(201).redirect("/");
-      }
-    });
-  }
+  res.clearCookie("jwt");
+  req.flash("notice", "You have been logged out.");
+  res.redirect("/");
 }
 
 module.exports = {
@@ -274,5 +280,5 @@ module.exports = {
   accountLogout,
   buildUpdateAccountView,
   updateAccount,
-  changePassword
+  changePassword,
 };

@@ -7,10 +7,6 @@ const Util = {};
 
 /***************************************
  * Construct the nav HTML unordered list
- **************************************/
-
-/* ************************
- * Constructs the nav HTML unordered list
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
@@ -69,7 +65,7 @@ Util.buildClassificationGrid = async function(data){
   } else { 
     grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
-  return grid
+  return grid;
 }
 
 /* **************************************
@@ -175,35 +171,5 @@ Util.checkAccountType = (req, res, next) => {
     res.redirect("/account/login");
   }
 };
-
-
- //Check if the user tye is allowed to access the routes
-Util.checkAccessRights = async (req, res, next) => {
-  if (req.cookies.jwt) {
-    const { account_type } = jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
-    if (["Employee", "Admin"].includes(account_type)) {
-      next()
-    }
-  } else {
-    req.flash("notice", "Access forbidden")
-    res.redirect("/account/login")
-  }
-}
-
-Util.updateJWTAccountInfo = async (data, req, res, next) => {
-  if (req.cookies.jwt) {
-    let jwtoken = req.cookies.jwt
-    const { exp } = jwt.verify(jwtoken, process.env.ACCESS_TOKEN_SECRET)
-    const newExp = (new Date(exp * 1000).getTime() - new Date().getTime()) / 1000
-    const newAccessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, { expiresIn: Math.round(newExp) })
-    if (process.env.NODE_ENV === "development") {
-      res.cookie("jwt", newAccessToken, { httpOnly: true, maxAge: 3600 * 1000 })
-    } else {
-      res.cookie("jwt", newAccessToken, { httpOnly: true, secure: true, maxAge: 3600 * 1000 })
-    }
-    return
-  }
-}
-
 
 module.exports = Util

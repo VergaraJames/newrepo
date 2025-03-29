@@ -75,7 +75,7 @@ validate.checkRegData = async (req, res, next) => {
       account_lastname,
       account_email,
     })
-    return
+    return;
   }
   next()
 }
@@ -85,20 +85,22 @@ validate.checkRegData = async (req, res, next) => {
 * ********************************* */
 validate.loginRules = () => {
   return [
+    // Email is required and must be a valid format
     body("account_email")
       .trim()
-      .escape()
-      .notEmpty()
       .isEmail()
       .normalizeEmail()
-      .withMessage("A valid email is required"),
+      .withMessage("A valid email is required."),
+
+    // Password is required
     body("account_password")
       .trim()
-      .escape()
       .notEmpty()
-      .withMessage("Invalid password")
-  ]
-}
+      .isLength({ min: 8 })
+      .withMessage("Does not meet password requirements."),
+  ];
+};
+
 
 /* ******************************
  * Check Login Data and return errors or continue to login
@@ -114,10 +116,11 @@ validate.checkLoginData = async (req, res, next) => {
       title: "Login",
       nav,
       account_email,
-    })
-    return 
+      account_password,
+    });
+    return;
   }
-  next()
+  next();
 }
 
 /* ******************************
