@@ -118,28 +118,27 @@ Util.buildClassificationList = async function (classification_id = null) {
 * Unity 5, Login Proccess
 **************************************** */
 Util.checkJWTToken = (req, res, next) => {
- if (req.cookies.jwt) {
-  jwt.verify(
-   req.cookies.jwt,
-   process.env.ACCESS_TOKEN_SECRET,
-   function (err, accountData) {
-    if (err) {
-     req.flash("notice", "Please log in")
-     res.clearCookie("jwt")
-     return res.redirect("/account/login")
-    }
-    res.locals.accountData = accountData
-    /* Flag response indicating client was "logged in" or authenticated */
-    res.locals.loggedin = 1
-    next()
-   })
- } else {
-  next()
+  if (req.cookies.jwt) {
+   jwt.verify(
+    req.cookies.jwt,
+    process.env.ACCESS_TOKEN_SECRET,
+    function (err, accountData) {
+     if (err) {
+      req.flash("Please log in")
+      res.clearCookie("jwt")
+      return res.redirect("/account/login")
+     }
+     res.locals.accountData = accountData
+     res.locals.loggedin = 1
+     next()
+    })
+  } else {
+   next()
+  }
  }
-}
 
 /* ****************************************
- *  Check Login
+ *  Check Login Authorization
  *  Unit 5, jwt authorize activity
  * From guide https://byui-cse.github.io/cse340-ww-content/views/jwt-authorize.html
  * ************************************ */

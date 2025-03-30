@@ -5,6 +5,7 @@ const accountController = require("../controllers/accountController");
 const utilities = require("../utilities");
 const regValidate = require("../utilities/account-validation");
 
+
 /* ***************************************
  * Account routes
  * Unit 4, deliver Register view activity
@@ -13,14 +14,17 @@ const regValidate = require("../utilities/account-validation");
  * From video https://www.youtube.com/watch?v=C2JiypeJqbQ */
 // Route to deliver Login and Logout view
 // Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
+
+// default Route to /account/ root 
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement));
+
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 router.post("/login", regValidate.loginRules(), regValidate.checkLoginData, utilities.handleErrors(accountController.accountLogin),
   (req, res) => { res.status(200).send("login process complete"); });
 router.get("/logout", utilities.handleErrors(accountController.accountLogout));
 // Route to deliver register view
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
-// Route to deliver account view
-router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildManagement));
+
 /* ***************************************
  * Account routes
  * Unit 5, Update and Update password
