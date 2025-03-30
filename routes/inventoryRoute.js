@@ -5,17 +5,24 @@ const utilities = require("../utilities/");
 const invController = require("../controllers/invController");
 const validate = require("../utilities/inventory-validation");
 const Util = require("../utilities/");
+const invCont = require("../controllers/invController")
+
 
 // Admin Routes
 // Unit 5, Check Account
 // Route to build inventory by classification view
+
+router.get("/", utilities.checkAccessRights, utilities.handleErrors(invController.buildManagementView))
+
+
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
 
 // New route for individual vehicle details
 // Route to bulid inventory detail - from video https://www.youtube.com/watch?v=yc6zcWe87VM&t=20s
 router.get("/detail/:id", utilities.handleErrors(invController.getVehicleDetails));
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON));
-router.get("/", Util.checkAccountType, utilities.handleErrors(invController.buildManagementView));
+
+
 router.get("/add-classification", Util.checkAccountType, utilities.handleErrors(invController.buildAddClassification));
 router.post("/add-classification", Util.checkAccountType, validate.classificationRules(), validate.checkClassificationData, utilities.handleErrors(invController.addClassification));
 
@@ -26,7 +33,12 @@ router.get("/edit/:id", Util.checkAccountType, utilities.handleErrors(invControl
 
 // Route Update inventoryy item
 // from guide https://byui-cse.github.io/cse340-ww-content/views/update-two.html
-router.post("/update/", Util.checkAccountType, validate.updateInventoryRules(), validate.checkUpdateData, utilities.handleErrors(invController.updateInventory));
+router.post("/update",
+  utilities.checkAccessRights,
+  validate.inventoryRules(),
+  validate.checkUpdateData,
+  utilities.handleErrors(invCont.updateInventory)
+)
 router.get("/delete/:id", Util.checkAccountType, utilities.handleErrors(invController.buildDeleteConfirmView));
 router.post("/delete/", Util.checkAccountType, utilities.handleErrors(invController.deleteInventoryItem));
 

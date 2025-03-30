@@ -171,4 +171,17 @@ Util.checkAccountType = (req, res, next) => {
   }
 };
 
+//Check if the user tye is allowed to access the routes
+Util.checkAccessRights = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const { account_type } = jwt.verify(req.cookies.jwt, process.env.ACCESS_TOKEN_SECRET)
+    if (["Employee", "Admin"].includes(account_type)) {
+      next()
+    }
+  } else {
+    req.flash("notice", "Access forbidden")
+    res.redirect("/account/login")
+  }
+}
+
 module.exports = Util
