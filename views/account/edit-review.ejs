@@ -1,0 +1,19 @@
+<h1><%= title %></h1>
+<%- messages() %>
+<% if (errors && errors.length) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<form action="/review/update" method="post" class="account-form">
+  <label for="review_text">Edit Review:</label>
+  <textarea id="review_text" name="review_text" required><%= review_text %></textarea>
+  <p>Screen Name: <%= locals.accountData.account_firstname.charAt(0) + "." + " " + locals.accountData.account_lastname %></p>
+  <input type="hidden" name="review_id" value="<%= review_id %>">
+  <input type="hidden" name="inv_id" value="<%= inv_id %>">
+  <button type="submit">Update Review</button>
+</form>
+<a href="/account/">Back to Account</a>

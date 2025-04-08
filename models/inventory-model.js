@@ -23,7 +23,7 @@ async function getInventoryByClassificationId(classification_id) {
     );
     return data.rows;
   } catch (error) {
-    console.error("get Inventory By Classification Id error " + error);
+    console.error("Error in inventory by classification ID " + error);
   }
 }
 
@@ -36,10 +36,10 @@ async function getVehicleById(inv_id) {
       "SELECT * FROM public.inventory WHERE inv_id = $1",
       [inv_id]
     );
-    return data.rows[0]; // Return just one vehicle or null if not found
+    return data.rows[0]; 
   } catch (error) {
-    console.error("get Vehicle By Id error " + error);
-    return null; // Return null on error or if vehicle not found
+    console.error("Error getting vehicle by ID." + error);
+    return null; 
   }
 }
 

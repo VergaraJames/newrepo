@@ -1,13 +1,13 @@
-const utilities = require(".")
-const { body, validationResult } = require("express-validator")
-const validate = {}
-const accountModel = require("../models/account-model")
+const utilities = require(".");
+const { body, validationResult } = require("express-validator");
+const validate = {};
+const accountModel = require("../models/account-model");
 
 /*  **********************************
-*  Registration Data Validation Rules
-*  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
-*  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
-* ********************************* */
+ *  Registration Data Validation Rules
+ *  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
+ *  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
+ * ********************************* */
 validate.registrationRules = () => {
   return [
     // firstname is required and must be string
@@ -28,18 +28,20 @@ validate.registrationRules = () => {
 
     // valid email is required and cannot already exist in the DB
     body("account_email")
-    .trim()
-    .escape()
-    .notEmpty()
-    .isEmail()
-    .normalizeEmail()
-    .withMessage("A valid email is required.")
-    .custom(async (account_email) => {
-      const emailExists = await accountModel.checkExistingEmail(account_email)
-      if (emailExists) {
-        throw new Error("Email exists. Please log in or use different email")
-      }
-    }),
+      .trim()
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("A valid email is required.")
+      .custom(async (account_email) => {
+        const emailExists = await accountModel.checkExistingEmail(
+          account_email
+        );
+        if (emailExists) {
+          throw new Error("Email exists. Please log in or use different email");
+        }
+      }),
 
     // password is required and must be strong password
     body("account_password")
@@ -53,20 +55,20 @@ validate.registrationRules = () => {
         minSymbols: 1,
       })
       .withMessage("Password does not meet requirements."),
-  ]
-}
+  ];
+};
 
 /* ******************************
-* Check data and return errors or continue to registration
-*  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
-*  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
-* ***************************** */
+ * Check data and return errors or continue to registration
+ *  From video https://www.youtube.com/watch?v=zkoPq7nbH3s
+ *  From guide https://blainerobertson.github.io/340-js/views/server-validation.html
+ * ***************************** */
 validate.checkRegData = async (req, res, next) => {
-  const { account_firstname, account_lastname, account_email } = req.body
-  let errors = []
-  errors = validationResult(req)
+  const { account_firstname, account_lastname, account_email } = req.body;
+  let errors = [];
+  errors = validationResult(req);
   if (!errors.isEmpty()) {
-    let nav = await utilities.getNav()
+    let nav = await utilities.getNav();
     res.render("account/register", {
       errors,
       title: "Register",
@@ -74,15 +76,15 @@ validate.checkRegData = async (req, res, next) => {
       account_firstname,
       account_lastname,
       account_email,
-    })
+    });
     return;
   }
-  next()
-}
+  next();
+};
 
 /* **********************************
-*  Login Data Validation Rules
-* ********************************* */
+ *  Login Data Validation Rules
+ * ********************************* */
 validate.loginRules = () => {
   return [
     // Email is required and must be a valid format
@@ -96,22 +98,21 @@ validate.loginRules = () => {
     body("account_password")
       .trim()
       .notEmpty()
-      .isLength({ min: 8 })
+      .isLength({ min: 12 })
       .withMessage("Does not meet password requirements."),
   ];
 };
-
 
 /* ******************************
  * Check Login Data and return errors or continue to login
  * ***************************** */
 validate.checkLoginData = async (req, res, next) => {
-  const { account_email, account_password } = req.body
-  let errors = []
-  errors = validationResult(req)
+  const { account_email, account_password } = req.body;
+  let errors = [];
+  errors = validationResult(req);
   if (!errors.isEmpty()) {
-    let nav = await utilities.getNav()
-    res.render("account/register", {
+    let nav = await utilities.getNav();
+    res.render("account/login", {
       errors,
       title: "Login",
       nav,
@@ -121,7 +122,7 @@ validate.checkLoginData = async (req, res, next) => {
     return;
   }
   next();
-}
+};
 
 /* ******************************
  * Update account and Change password Validation
@@ -201,4 +202,4 @@ validate.checkPasswordData = async (req, res, next) => {
   next();
 };
 
-module.exports = validate
+module.exports = validate;

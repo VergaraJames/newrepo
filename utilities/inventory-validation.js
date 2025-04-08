@@ -136,12 +136,12 @@ validate.checkInventoryData = async (req, res, next) => {
     const classificationList = await utilities.buildClassificationList(
       req.body.classification_id
     );
-    return res.render("inventory/add-inventory", {
-      classificationList,
+    return res.render("inv/add-inventory", {
       title: "Add Inventory",
-      errors: errors.array(),
-      classification_id,
       nav,
+      classificationList, 
+      errors: errors.array(), 
+      inv_id,
       inv_make,
       inv_model,
       inv_description,
@@ -151,6 +151,7 @@ validate.checkInventoryData = async (req, res, next) => {
       inv_year,
       inv_miles,
       inv_color,
+      classification_id
     });
     return;
   }
@@ -241,7 +242,7 @@ validate.checkUpdateData = async (req, res, next) => {
     let nav = await utilities.getNav()
     const classificationList = await utilities.buildClassificationList(classification_id)
     const itemName = `${inv_make} ${inv_model}`
-    return res.render("inventory/edit-inventory", { 
+    return res.render("inventory/edit-vehicle", { 
       title: "Edit " + itemName,
       nav,
       classificationList, 

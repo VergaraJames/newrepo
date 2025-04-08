@@ -1,0 +1,14 @@
+<% if (title) { %>
+    <h1> <%= title %></h1>
+  <% } else {
+    res.redirect('/')
+  } %>
+  
+  <%- messages() %>
+  <h2>Welcome <%- locals.accountData.account_firstname %></h2>
+  <p>You're logged in</p>
+  <p><a href="/account/update/<%- locals.accountData.account_id %>">Update account information</a></p>
+  <% if (["Employee", "Admin"].includes( locals.accountData.account_type)) { %>
+    <h3>Iventory Management</h3>
+    <a href="/inv">Inventory Management</a>
+  <% } %>

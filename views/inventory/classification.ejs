@@ -1,12 +1,12 @@
 <!-- The Heading -->
 <% if (title) { %>
-  <h1><%= title %></h1>
-  <% } else {
-    res.redirect('/')
-  } %>
+    <h1><%= title %></h1>
+    <% } else {
+      res.redirect('/')
+    } %>
 
 <!-- A Message Block -->
 <%# messages() %>
-
+ 
 <!-- The Inventory Items Display -->
 <%- grid %>

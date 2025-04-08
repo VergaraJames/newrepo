@@ -1,43 +1,61 @@
 <% if (title) { %>
-<h1><%= title %></h1>
-<% } else { res.redirect('/') } %> <%- messages() %> <% if (errors) { %>
-<ul class="notice">
-  <% errors.array().forEach(error=> { %>
-  <li><%= error.msg %></li>
-  <% }) %>
-</ul>
-<% } %>
+<h1>
+    <%= title %>
+</h1>
 
+
+<% } else {
+res.redirect('/')
+} %>
+<%- messages() %>
+<% if (errors) { %>
+<ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li>
+        <%= error.msg %>
+    </li>
+    <% }) %>
+</ul>
+
+
+<% } %>
 <form class="account-form" action="/account/update" method="post">
-  <label for="account_firstname">First Name:</label>
-  <input type="text" name="account_firstname" id="account_firstname" required pattern="^[A-Za-z -]+$" value="<%= locals.account_firstname %>">
-  
-  <label for="account_lastname">Last Name:</label>
-  <input type="text" name="account_lastname" id="account_lastname" required pattern="^[A-Za-z -]+$" value="<%= locals.account_lastname %>">
-  
-  <label for="account_email">Email:</label>
-  <input type="email" name="account_email" id="account_email" required value="<%= locals.account_email %>">
-  
-  <input type="hidden" name="account_id" value="<%= locals.account_id %>">
-  <button type="submit">Update Account</button>
+    <label for="account_firstname">First Name:</label>
+    <input type="text" name="account_firstname" id="account_firstname" required
+        pattern="^[A-Za-z -]+$"
+        value="<%= locals.account_firstname %>">
+    <label for="account_lastname">Last Name:</label>
+    <input type="text" name="account_lastname" id="account_lastname" required
+        pattern="^[A-Za-z -]+$"
+        value="<%= locals.account_lastname %>">
+    <label for="account_email">Email:</label>
+    <input type="email" name="account_email" id="account_email" required
+        value="<%= locals.account_email %>">
+    <input type="hidden" name="account_id"
+        value="<%= locals.account_id %>">
+    <button type="submit">Update Account</button>
 </form>
 
 <form class="account-form" action="/account/change-password" method="post">
-  <div class="password-requirements">
-    <p>Entering a new password will replace your current one. It must be at least 12 haracters and contain:</p>
-    <ul>
-      <li>1 number</li>
-      <li>1 capital letter</li>
-      <li>1 special character</li>
-    </ul>
-  </div>
-  
-  <label for="account_password">New Password:</label>
-  <input type="password" id="account_password" name="account_password" required pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$" placeholder="Enter your new password">
-  
-  <label for="account_password_confirm">Confirm Password:</label>
-  <input type="password" id="account_password_confirm" name="account_password_confirm" required placeholder="Confirm your new password">
-  
-  <input type="hidden" name="account_id" value="<%= locals.account_id %>">
-  <button type="submit">Change Password</button>
+    <div class="password-requirements">
+        <p>Entering a new password will replace your current one. It must be at
+            least 12 haracters and contain:</p>
+        <ul>
+            <li>1 number</li>
+            <li>1 capital letter</li>
+            <li>1 special character</li>
+        </ul>
+    </div>
+    <label for="account_password">New Password:</label>
+    <input type="password" id="account_password" name="account_password"
+        required
+        pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$"
+        placeholder="Enter your new password">
+    <label for="account_password_confirm">Confirm Password:</label>
+    <input type="password" id="account_password_confirm"
+        name="account_password_confirm" required
+        placeholder="Confirm your new password">
+    <input type="hidden" name="account_id"
+        value="<%= locals.account_id %>">
+    <button type="submit">Change Password</button>
 </form>
