@@ -1,8 +1,11 @@
-/* *****************************
- * Account Controller for managing account-related functionalities.
- * Includes login, registration, account management, update, logout, and password changes.
- ***************************** */
+Por favor ordenar alfabeticamente las funciones contenidas en el archivo accountController.js. Este es el codigo:
 
+
+/* *****************************
+ * Account Controller
+ * Unit 4, deliver login view activity
+ * From video (https://www.youtube.com/watch?v=5H0aIxO1oC0)
+ ******************************** */
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const reviewModel = require("../models/review-model");
@@ -13,7 +16,12 @@ const bcrypt = require("bcryptjs");
 /* ****************************************
  * Function for user account login.
  * Validates credentials and generates JWT for session management.
- **************************************** */
+ *  From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+ *  Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
+ *  Process Login
+ * Updated with unit 5, Login process
+ * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
+ * *************************************** */
 async function accountLogin(req, res) {
   let nav = await utilities.getNav();
   const { account_email, account_password } = req.body;
@@ -31,9 +39,7 @@ async function accountLogin(req, res) {
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
-      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: 3600 * 1000,
-      });
+      const accessToken = jwt.sign(accountData, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
       if (process.env.NODE_ENV === "development") {
         res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
       } else {
@@ -57,6 +63,8 @@ async function accountLogin(req, res) {
 /* ****************************************
  * Function for logging out the user.
  * Clears JWT and redirects to the homepage.
+ * Updated with unit 5, Login process
+ * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  **************************************** */
 async function accountLogout(req, res) {
   res.clearCookie("jwt");
@@ -80,6 +88,8 @@ async function buildLogin(req, res) {
 /* ****************************************
  * Function for building the account management view.
  * Displays account details and associated reviews.
+ * Deliver management view
+ * Including Review proccess to the final project 
  **************************************** */
 async function buildManagement(req, res) {
   let nav = await utilities.getNav();
@@ -102,7 +112,10 @@ async function buildManagement(req, res) {
 
 /* ****************************************
  * Function for building the registration view.
- * Renders the registration page template.
+ * Deliver registration view
+ * From the video https://www.youtube.com/watch?v=5H0aIxO1oC0
+ * from guide https://blainerobertson.github.io/340-js/views/account-registration.html
+ * and https://blainerobertson.github.io/340-js/views/server-validation.html
  **************************************** */
 async function buildRegister(req, res) {
   let nav = await utilities.getNav();
@@ -114,8 +127,8 @@ async function buildRegister(req, res) {
 }
 
 /* ****************************************
- * Function for building the update account view.
- * Displays the update form with current account details.
+ * Displays the update form with current account details
+ * Build Update Account View - step 3 of task 5
  **************************************** */
 async function buildUpdateAccountView(req, res) {
   let nav = await utilities.getNav();
@@ -133,7 +146,9 @@ async function buildUpdateAccountView(req, res) {
 
 /* ****************************************
  * Function for changing the user password.
- * Hashes new password and updates it in the database.
+ * Hashes new password and updates it in the database
+ * Updated with unit 5, Login process
+ * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html.
  **************************************** */
 async function changePassword(req, res) {
   let nav = await utilities.getNav();
@@ -159,8 +174,11 @@ async function changePassword(req, res) {
 }
 
 /* ****************************************
- * Function for registering a new account.
- * Validates input, hashes the password, and saves the account in the database.
+ * Validates input, hashes the password, and saves the account in the database
+ * Process Registration - Function for registering a new account
+ * Unit 4 Process registration activity
+ * From video https://www.youtube.com/watch?v=7DHezZ7AO-Y
+ * Guide from https://blainerobertson.github.io/340-js/views/account-process-register.html
  **************************************** */
 async function registerAccount(req, res) {
   let nav = await utilities.getNav();
@@ -179,12 +197,7 @@ async function registerAccount(req, res) {
     return;
   }
 
-  const regResult = await accountModel.registerAccount(
-    account_firstname,
-    account_lastname,
-    account_email,
-    hashedPassword
-  );
+  const regResult = await accountModel.registerAccount(account_firstname, account_lastname, account_email, hashedPassword);
 
   if (regResult) {
     req.flash("notice", `Congratulations, you're registered ${account_firstname}. Please log in.`);
@@ -205,23 +218,18 @@ async function registerAccount(req, res) {
 
 /* ****************************************
  * Function for updating account information.
- * Updates user details such as name and email.
+ * Updates user details such as name and email 
+ * Updated with unit 5, Login process
+ * Guide from https://byui-cse.github.io/cse340-ww-content/views/login.html
  **************************************** */
 async function updateAccount(req, res) {
   let nav = await utilities.getNav();
   const { account_firstname, account_lastname, account_email, account_id } = req.body;
-  const updateResult = await accountModel.updateAccount(
-    account_id,
-    account_firstname,
-    account_lastname,
-    account_email
-  );
+  const updateResult = await accountModel.updateAccount(account_id, account_firstname, account_lastname, account_email);
   if (updateResult) {
     const updatedAccount = await accountModel.getAccountById(account_id);
     delete updatedAccount.account_password;
-    const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: 3600 * 1000,
-    });
+    const accessToken = jwt.sign(updatedAccount, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 3600 * 1000 });
     if (process.env.NODE_ENV === "development") {
       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
     } else {

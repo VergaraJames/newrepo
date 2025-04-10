@@ -1,29 +1,5 @@
 const pool = require("../database/");
 
-/* *****************************
- *   Register new account
- *   From guide https://blainerobertson.github.io/340-js/views/account-process-register.html
- * *************************** */
-async function registerAccount(
-  account_firstname,
-  account_lastname,
-  account_email,
-  account_password
-) {
-  try {
-    const sql =
-      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
-    return await pool.query(sql, [
-      account_firstname,
-      account_lastname,
-      account_email,
-      account_password,
-    ]);
-  } catch (error) {
-    return error.message;
-  }
-}
-
 /* **********************
  *   Check for existing email
  * ********************* */
@@ -40,8 +16,6 @@ async function checkExistingEmail(account_email) {
 /* *****************************
  * Get account by email
  * Return account data using email address
- * from video https://www.youtube.com/watch?v=vqCWUqt8heQ
- * Unit 5, Login Activity
  * *************************** */
 async function getAccountByEmail(account_email) {
   try {
@@ -67,6 +41,30 @@ async function getAccountById(account_id) {
   } catch (error) {
     console.error("Get Account by ID Error: " + error);
     return null;
+  }
+}
+
+/* *****************************
+ *   Register new account
+ *   From guide https://blainerobertson.github.io/340-js/views/account-process-register.html
+ * *************************** */
+async function registerAccount(
+  account_firstname,
+  account_lastname,
+  account_email,
+  account_password
+) {
+  try {
+    const sql =
+      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+    return await pool.query(sql, [
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password,
+    ]);
+  } catch (error) {
+    return error.message;
   }
 }
 
@@ -111,10 +109,10 @@ async function updatePassword(account_id, account_password) {
 }
 
 module.exports = {
-  registerAccount,
   checkExistingEmail,
   getAccountByEmail,
   getAccountById,
+  registerAccount,
   updateAccount,
   updatePassword,
 };
