@@ -1,21 +1,6 @@
 const pool = require("../database/");
 
 /* ***************************
- *  Add Review
- *  Final Project
- * ************************** */
-async function addReview(review_text, inv_id, account_id) {
-  try {
-    const sql =
-      "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *";
-    return await pool.query(sql, [review_text, inv_id, account_id]);
-  } catch (error) {
-    console.error("Add Review Error: " + error);
-    throw error;
-  }
-}
-
-/* ***************************
  *  Update Review
  *  Final Project
  * ************************** */
@@ -26,20 +11,6 @@ async function updateReview(review_id, review_text, account_id) {
     return await pool.query(sql, [review_text, review_id, account_id]);
   } catch (error) {
     console.error("Update Review Error: " + error);
-    throw error;
-  }
-}
-
-/* ***************************
- *  Delete Review
- *  Final Project
- * ************************** */
-async function deleteReview(review_id, account_id) {
-  try {
-    const sql = "DELETE FROM review WHERE review_id = $1 AND account_id = $2";
-    return await pool.query(sql, [review_id, account_id]);
-  } catch (error) {
-    console.error("Delete Review Error: " + error);
     throw error;
   }
 }
@@ -84,10 +55,40 @@ async function getReviewsByAccountId(account_id) {
   }
 }
 
+/* ***************************
+ *  Delete Review
+ *  Final Project
+ * ************************** */
+async function deleteReview(review_id, account_id) {
+  try {
+    const sql = "DELETE FROM review WHERE review_id = $1 AND account_id = $2";
+    return await pool.query(sql, [review_id, account_id]);
+  } catch (error) {
+    console.error("Delete Review Error: " + error);
+    throw error;
+  }
+}
+
+/* ***************************
+ *  Add Review
+ *  Final Project
+ * ************************** */
+async function addReview(review_text, inv_id, account_id) {
+  try {
+    const sql =
+      "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *";
+    return await pool.query(sql, [review_text, inv_id, account_id]);
+  } catch (error) {
+    console.error("Add Review Error: " + error);
+    throw error;
+  }
+}
+
+// Corrected ordering issue in function module.exports (Comment added)
 module.exports = {
   addReview,
-  updateReview,
   deleteReview,
-  getReviewsByInvId,
   getReviewsByAccountId,
+  getReviewsByInvId,
+  updateReview,
 };

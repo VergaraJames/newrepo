@@ -1,29 +1,32 @@
-/*  Review process to the final project */
+/* Review process for the final project */
 
 const reviewModel = require("../models/review-model");
 const utilities = require("../utilities/");
 const reviewValidate = require("../utilities/review-validation");
 
-/* Add a review */
-async function addReview(req, res) {
-  const { review_text, inv_id } = req.body;
+/* ***************************
+ *  Function to delete a review
+ * *************************** */
+async function deleteReview(req, res) {
+  const { review_id } = req.body;
   const accountData = res.locals.accountData;
   try {
-    const result = await reviewModel.addReview(review_text, inv_id, accountData.account_id);
+    const result = await reviewModel.deleteReview(review_id, accountData.account_id);
     if (result.rowCount > 0) {
-      req.flash("notice", "Review added successfully!");
-      res.redirect(`/inv/detail/${inv_id}`);
+      req.flash("notice", "Review deleted successfully!");
     } else {
-      req.flash("notice", "Failed to add review.");
-      res.redirect(`/inv/detail/${inv_id}`);
+      req.flash("notice", "Error deleting review.");
     }
+    res.redirect("/account/");
   } catch (error) {
-    req.flash("notice", "Error adding review.");
-    res.redirect(`/inv/detail/${inv_id}`);
+    req.flash("notice", "Error deleting review.");
+    res.redirect("/account/");
   }
 }
 
-/* Screen to see the reviews */
+/* ***************************
+ *  Function to display edit review view
+ * *************************** */
 async function buildEditReviewView(req, res) {
   const review_id = req.params.review_id;
   const accountData = res.locals.accountData;
@@ -44,7 +47,30 @@ async function buildEditReviewView(req, res) {
   });
 }
 
-/* To update the information of the reviews */
+/* ***************************
+ *  Function to add a new review
+ * *************************** */
+async function addReview(req, res) {
+  const { review_text, inv_id } = req.body;
+  const accountData = res.locals.accountData;
+  try {
+    const result = await reviewModel.addReview(review_text, inv_id, accountData.account_id);
+    if (result.rowCount > 0) {
+      req.flash("notice", "Review added successfully!");
+      res.redirect(`/inv/detail/${inv_id}`);
+    } else {
+      req.flash("notice", "Failed to add review.");
+      res.redirect(`/inv/detail/${inv_id}`);
+    }
+  } catch (error) {
+    req.flash("notice", "Error adding review.");
+    res.redirect(`/inv/detail/${inv_id}`);
+  }
+}
+
+/* ***************************
+ *  Function to update a review
+ * *************************** */
 async function updateReview(req, res) {
   const { review_text, review_id, inv_id } = req.body;
   const accountData = res.locals.accountData;
@@ -63,22 +89,4 @@ async function updateReview(req, res) {
   }
 }
 
-/* To delete the information of the reviews or the Review totally */
-async function deleteReview(req, res) {
-  const { review_id } = req.body;
-  const accountData = res.locals.accountData;
-  try {
-    const result = await reviewModel.deleteReview(review_id, accountData.account_id);
-    if (result.rowCount > 0) {
-      req.flash("notice", "Review deleted successfully!");
-    } else {
-      req.flash("notice", "Error deleting review.");
-    }
-    res.redirect("/account/");
-  } catch (error) {
-    req.flash("notice", "Error deleting review.");
-    res.redirect("/account/");
-  }
-}
-
-module.exports = { addReview, buildEditReviewView, updateReview, deleteReview };
+module.exports = { deleteReview, buildEditReviewView, addReview, updateReview };

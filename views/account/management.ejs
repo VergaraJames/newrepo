@@ -1,45 +1,57 @@
+<!-- ***************************
+     Management Page Template
+**************************** -->
+
 <h1><%= title %></h1>
+
 <div class="account">
-<%- messages() %>
+  <!-- Flash messages for user notifications -->
+  <%- messages() %>
+
+  <!-- Display a personalized welcome message based on user role -->
   <% if (locals.accountData.account_type === "Client") { %>
     <h2>Welcome back, <%= locals.accountData.account_firstname %>!</h2>
-    <p><a href="/account/update">Update Account Information</a></p>
-  <% } else if (locals.accountData.account_type === "Employee" || locals.accountData.account_type === "Admin") { %>
+    <p><a href="/account/update" class="btn btn-secondary">Update Account Information</a></p>
+  <% } else if (
+    locals.accountData.account_type === "Employee" || 
+    locals.accountData.account_type === "Admin"
+  ) { %>
     <h2>Welcome back, <%= locals.accountData.account_firstname %>!</h2>
     <h3>Inventory Management</h3>
-    <p><a href="/inv">Manage your inventory</a></p>
-    <p><a href="/account/update">Update Account Information</a></p>
+    <p><a href="/inv" class="btn btn-secondary">Manage your inventory</a></p>
+    <p><a href="/account/update" class="btn btn-secondary">Update Account Information</a></p>
   <% } %>
 
+  <!-- Display user's reviews -->
   <h2>Your Reviews</h2>
+
   <% if (!reviews || reviews.length === 0) { %>
     <p>You haven't written any reviews yet.</p>
   <% } else { %>
-
-
     <ul class="reviews">
-      <% reviews.forEach(review => { %>
-        <li>
-          <p><%= review.review_text %></p>
-          <p>Vehicle: <%= review.inv_make %> <%= review.inv_model %></p>
-          <p>Date: <%= review.review_date.toLocaleDateString() %></p>
-            <input type="hidden" name="review_id" value="<%= review.review_id %>">
-           <a href="/review/edit/<%= review.review_id %>">
-            <button class="btn btn-primary"><i class="bi-pencil"></i> Edit</button>  
+      <!-- Loop through user's reviews -->
+      <% reviews.forEach((review) => { %>
+        <li class="review-item">
+          <p><strong>Review:</strong> <%= review.review_text %></p>
+          <p><strong>Vehicle:</strong> <%= review.inv_make %> <%= review.inv_model %></p>
+          <p><strong>Date:</strong> <%= review.review_date.toLocaleDateString() %></p>
+
+          <!-- Edit button -->
+          <a href="/review/edit/<%= review.review_id %>">
+            <button class="btn btn-primary">
+              <i class="bi-pencil"></i> Edit
+            </button>
           </a>
 
+          <!-- Delete form -->
           <form action="/review/delete" method="post" style="display:inline;">
             <input type="hidden" name="review_id" value="<%= review.review_id %>">
-         <!--    <button class="review" type="submit">Delete (is permanant)</button> 
-            <div class="container text-center mt-5"> -->
-              <button class="btn btn-primary"> 
-                <i class="bi bi-trash"></i> Delete (is permanant)
-              </button>
-          </form>    
-          
+            <button class="btn btn-danger">
+              <i class="bi bi-trash"></i> Delete (permanent)
+            </button>
+          </form>
         </li>
-      <% }) %>
+      <% }); %>
     </ul>
-    </div>
   <% } %>
 </div>
