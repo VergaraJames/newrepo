@@ -1,4 +1,5 @@
 // Needed Resources
+// Needed Resources
 const express = require("express");
 const router = new express.Router();
 const accountController = require("../controllers/accountController");
@@ -7,48 +8,49 @@ const regValidate = require("../utilities/account-validation");
 
 /* ***************************************
  * Account routes
- * Unit 4, deliver Register view activity
+ * Unit 4: Register View Activity
+ * Unit 5: JWT Authorization & Update Password
  * from video https://www.youtube.com/watch?v=5H0aIxO1oC0
  * Unit 5, JWT Authorization Activity
- * From video https://www.youtube.com/watch?v=C2JiypeJqbQ */
-// Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
-// Route to begin with Login and to finish with Logout view
-router.get("/login", utilities.handleErrors(accountController.buildLogin));
-router.get("/logout", utilities.handleErrors(accountController.accountLogout));
+ * From video https://www.youtube.com/watch?v=C2JiypeJqbQ 
+ * Updated with unit 5, login proccess from guide https://byui-cse.github.io/cse340-ww-content/views/login.html
+ * ************************************** */
 
-// Route to access register view
+// Route for logging in
 router.get(
-  "/register",
-  utilities.handleErrors(accountController.buildRegister)
+  "/login",
+  utilities.handleErrors(accountController.buildLogin)
 );
 
-// default Route to /account/ root
+// Route for logging out
+router.get(
+  "/logout",
+  utilities.handleErrors(accountController.accountLogout)
+);
+
+// Default route to /account/ root
 router.get(
   "/",
   utilities.checkLogin,
   utilities.handleErrors(accountController.buildManagement)
 );
 
-/* ***************************************
- * Account routes
- * Unit 5, Update and Update password
- * **************************************/
-// Task 5: To access update view
+// Process the registration data
+// from guide https://blainerobertson.github.io/340-js/views/server-validation.html
+router.get(
+  "/register",
+  utilities.handleErrors(accountController.buildRegister)
+);
+
+// Route to access update view
+// Task 5: Process update account and change password
 router.get(
   "/update",
   utilities.checkJWTToken,
   utilities.handleErrors(accountController.buildUpdateAccountView)
 );
 
-// Task 5: Process update account and change password
-router.post(
-  "/update",
-  utilities.checkJWTToken,
-  regValidate.updateAccountRules(),
-  regValidate.checkUpdateData,
-  utilities.handleErrors(accountController.updateAccount)
-);
-
+// Process change password
 router.post(
   "/change-password",
   utilities.checkJWTToken,
@@ -57,7 +59,15 @@ router.post(
   utilities.handleErrors(accountController.changePassword)
 );
 
-// Process the registration data
+// Process login data
+router.post(
+  "/login",
+  regValidate.loginRules(),
+  regValidate.checkLoginData,
+  utilities.handleErrors(accountController.accountLogin)
+);
+
+// Process registration data
 // from guide https://blainerobertson.github.io/340-js/views/server-validation.html
 router.post(
   "/register",
@@ -66,11 +76,13 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 );
 
+// Process update account
 router.post(
-  "/login",
-  regValidate.loginRules(),
-  regValidate.checkLoginData,
-  utilities.handleErrors(accountController.accountLogin)
+  "/update",
+  utilities.checkJWTToken,
+  regValidate.updateAccountRules(),
+  regValidate.checkUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
 );
 
 // Error handling middleware
